@@ -1,0 +1,33 @@
+.anps-testimonials {background: #fff;text-align: center;padding: 0;padding-bottom: 4em;max-width: 750px;margin: auto;position: relative;overflow: hidden;}
+.anps-testimonials h2 {margin: 0;margin-top: -1.7em;padding: 0;font-size: 1em;text-align: center;color: #bbb;}
+.anps-testimonials .anps-testimonials__slides {width: 400%;left: 0;padding-left: 0;padding-top: 1em;overflow: hidden;list-style: none;position: relative;-webkit-transition: transform .5s;-moz-transition: transform .5s;-o-transition: transform .5s;transition: transform .5s;}
+.anps-testimonials .anps-testimonials__slides li {width: 25%;position: relative;float: left;}
+.anps-testimonials li p {margin-top: 0;}
+.anps-testimonials li q {max-width: 90%;margin: auto;color: #666;font-size: 1.3em;font-weight: bold;}
+.anps-testimonials li img {width: 3em;height: 3em;object-fit: cover;border-radius: 50%;margin-left: -1.5em;margin-right: .5em;vertical-align: middle;}
+.anps-testimonials .anps-slides-navigation {display: flex;justify-content: center;list-style: none;text-align: center;bottom: 1em;position: absolute;width: 104px;left: 50%;margin-left: -52px;}
+.anps-testimonials input {display: none;}
+.anps-testimonials .anps-slides-navigation label {float: left;margin: 6px;display: block;height: 10px;width: 10px;-webkit-border-radius: 50%;border-radius: 50%;border: solid 2px #ebebeb;font-size: 0;}
+.anps-testimonials li span.author {margin-top: .5em;font-size: 1.2em;color: #777;display: block;}
+#radio-1:checked ~ .anps-testimonials__slides {transform: translateX(0%);}
+#radio-2:checked ~ .anps-testimonials__slides {transform: translateX(-25%);}
+#radio-3:checked ~ .anps-testimonials__slides {transform: translateX(-50%);}
+#radio-4:checked ~ .anps-testimonials__slides {transform: translateX(-75%);}
+.anps-testimonials .anps-slides-navigation label:hover {cursor: pointer;}
+.anps-testimonials
+  #radio-1:checked
+  ~ .anps-slides-navigation
+  label#dotForRadio-1, .anps-testimonials
+  #radio-2:checked
+  ~ .anps-slides-navigation
+  label#dotForRadio-2, .anps-testimonials
+  #radio-3:checked
+  ~ .anps-slides-navigation
+  label#dotForRadio-3, .anps-testimonials
+  #radio-4:checked
+  ~ .anps-slides-navigation
+  label#dotForRadio-4 {background: #ebebeb;}
+@media (max-width: 796px) {}
+@media (max-width: 480px) {.anps-testimonials li p {padding-left: .5em;padding-right: .5em;}
+	.anps-testimonials li q {font-size: 1em;}
+	.anps-testimonials li img {width: 2em;margin-left: -1em;margin-right: .25em;}}
