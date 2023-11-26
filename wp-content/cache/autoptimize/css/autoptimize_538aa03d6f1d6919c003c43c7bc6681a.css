@@ -4359,11 +4359,11 @@ a img.aligncenter {display: block;margin-left: auto;margin-right: auto;}
 .screen-reader-text:focus {background-color: #f1f1f1;border-radius: 3px;box-shadow: 0 0 2px 2px rgba(0,0,0,.6);clip: auto !important;color: #21759b;display: block;font-size: 14px;font-size: .875rem;font-weight: 700;height: auto;left: 5px;line-height: normal;padding: 15px 23px 14px;text-decoration: none;top: 5px;width: auto;z-index: 100000;}
 .post-desc .more-link {display: none;}
 .logo .logo-wrap {font-family: "Arial",Helvetica,sans-serif;}
-.featured-title, .quantity .quantity-field, .cart_totals th, .rev_slider, h1, h2, h3, h4, h5, h6, .h5, .title.h5, table.table>tbody th, table.table>thead th, table.table>tfoot th, .search-notice-label, .filter-dark button, .filter:not(.filter-dark) button, .orderform .quantity-field, .product-top-meta, .onsale, .page-header .page-title, *:not(.widget)>.download, .btn, .button, .contact-number, .site-footer .widget_recent_entries a, .font1 {font-family: "Montserrat";font-weight: 500;}
-.breadcrumb {font-family: "Montserrat";}
-.btn.btn-xs, body, .alert, div.wpcf7-mail-sent-ng, div.wpcf7-validation-errors, .search-result-title, .contact-form .form-group label, .contact-form .form-group .wpcf7-not-valid-tip, .wpcf7 .form-group label, .wpcf7 .form-group .wpcf7-not-valid-tip, .heading-subtitle, .top-bar-style-2, .large-above-menu.style-2 .widget_anpstext {font-family: "Nunito";}
-nav.site-navigation ul li a, .menu-button, .megamenu-title {font-family: "Montserrat";font-weight: 500;}
-@media (max-width:1199px) {.site-navigation .main-menu li a {font-family: "Montserrat";font-weight: 500;}}
+.featured-title, .quantity .quantity-field, .cart_totals th, .rev_slider, h1, h2, h3, h4, h5, h6, .h5, .title.h5, table.table>tbody th, table.table>thead th, table.table>tfoot th, .search-notice-label, .filter-dark button, .filter:not(.filter-dark) button, .orderform .quantity-field, .product-top-meta, .onsale, .page-header .page-title, *:not(.widget)>.download, .btn, .button, .contact-number, .site-footer .widget_recent_entries a, .font1 {font-family: "Trebuchet MS",Helvetica,sans-serif;}
+.breadcrumb {font-family: "Trebuchet MS",Helvetica,sans-serif;}
+.btn.btn-xs, body, .alert, div.wpcf7-mail-sent-ng, div.wpcf7-validation-errors, .search-result-title, .contact-form .form-group label, .contact-form .form-group .wpcf7-not-valid-tip, .wpcf7 .form-group label, .wpcf7 .form-group .wpcf7-not-valid-tip, .heading-subtitle, .top-bar-style-2, .large-above-menu.style-2 .widget_anpstext {font-family: "Tahoma",Geneva,sans-serif;}
+nav.site-navigation ul li a, .menu-button, .megamenu-title {font-family: "Trebuchet MS",Helvetica,sans-serif;}
+@media (max-width:1199px) {.site-navigation .main-menu li a {font-family: "Trebuchet MS",Helvetica,sans-serif;}}
 body, .site-main .wp-caption p.wp-caption-text, .anps_menu_widget .menu a:before, .vc_gitem_row .vc_gitem-col.anps-grid .post-desc, .vc_gitem_row .vc_gitem-col.anps-grid-mansonry .post-desc, .alert, .projects-item .project-title, .product_meta, .btn.btn-wide, .btn.btn-lg, .breadcrumb li:before {font-size: 18px;}
 h1, .h1 {font-size: 26px;}
 h2, .h2 {font-size: 36px;}
@@ -8008,31 +8008,13 @@ figure.wp-block-image img.lazyloading {min-width: 150px;}
 article {border-radius: 15px;}
 article div.post__img {border-radius: 15px;}
 .wp-post-image {border-radius: 15px;max-width: 100%;}
-.vc_custom_1519980602043 {margin-top: 50px !important;}
-.vc_custom_1700073885937 {margin-bottom: 0 !important;}
-.vc_custom_1693063561258 {margin-bottom: 0 !important;}
-.vc_custom_1693063596556 {margin-bottom: 0 !important;}
-.vc_custom_1692892546746 {padding-top: 5px !important;padding-right: 25px !important;padding-bottom: 5px !important;padding-left: 25px !important;background-color: rgba(57,217,224,.2) !important;border-radius: 5px !important;}
-.vc_custom_1521193176589 {background-color: #d4fbcf !important;border-radius: 100% !important;}
-.vc_custom_1692892651732 {margin-bottom: 0 !important;}
-.vc_custom_1521193217927 {background-color: #d4fbcf !important;border-radius: 100% !important;}
-.vc_custom_1692892698664 {margin-bottom: 0 !important;}
-.vc_custom_1521193238557 {background-color: #d4fbcf !important;border-radius: 100% !important;}
-.vc_custom_1692892793439 {margin-bottom: 0 !important;}
-.vc_custom_1521193228634 {background-color: #d4fbcf !important;border-radius: 100% !important;}
-.vc_custom_1692892848455 {margin-bottom: 0 !important;}
-.vc_custom_1521193238557 {background-color: #d4fbcf !important;border-radius: 100% !important;}
-.vc_custom_1692892905792 {margin-bottom: 0 !important;}
-.vc_custom_1521193228634 {background-color: #d4fbcf !important;border-radius: 100% !important;}
-.vc_custom_1692892966343 {margin-bottom: 0 !important;}
-.vc_custom_1692893502634 {margin-bottom: 0 !important;}
-.vc_custom_1692892546746 {padding-top: 5px !important;padding-right: 25px !important;padding-bottom: 5px !important;padding-left: 25px !important;background-color: rgba(57,217,224,.2) !important;border-radius: 5px !important;}
-.vc_custom_1521193176589 {background-color: #d4fbcf !important;border-radius: 100% !important;}
-.vc_custom_1521193217927 {background-color: #d4fbcf !important;border-radius: 100% !important;}
-.vc_custom_1521193238557 {background-color: #d4fbcf !important;border-radius: 100% !important;}
-.vc_custom_1521193228634 {background-color: #d4fbcf !important;border-radius: 100% !important;}
-.vc_custom_1521193238557 {background-color: #d4fbcf !important;border-radius: 100% !important;}
-.vc_custom_1521193228634 {background-color: #d4fbcf !important;border-radius: 100% !important;}
+.vc_custom_1542623187843 {border-radius: 100% !important;}
+.vc_custom_1542623199122 {border-radius: 100% !important;}
+.vc_custom_1542623207257 {border-radius: 100% !important;}
+.vc_custom_1542623223641 {border-radius: 100% !important;}
+.vc_custom_1538399331893 {padding-top: 0 !important;}
+.vc_custom_1538399331893 {padding-top: 0 !important;}
+.vc_custom_1539690002682 {background-color: #fff !important;border-radius: 3px !important;}
 .cls-1 {fill-rule: evenodd;fill: url("#linear-gradient");}
 .animated {animation-duration: 1s;animation-fill-mode: both;}
 .animated.infinite {animation-iteration-count: infinite;}
