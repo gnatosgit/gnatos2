@@ -4359,11 +4359,11 @@ a img.aligncenter {display: block;margin-left: auto;margin-right: auto;}
 .screen-reader-text:focus {background-color: #f1f1f1;border-radius: 3px;box-shadow: 0 0 2px 2px rgba(0,0,0,.6);clip: auto !important;color: #21759b;display: block;font-size: 14px;font-size: .875rem;font-weight: 700;height: auto;left: 5px;line-height: normal;padding: 15px 23px 14px;text-decoration: none;top: 5px;width: auto;z-index: 100000;}
 .post-desc .more-link {display: none;}
 .logo .logo-wrap {font-family: "Arial",Helvetica,sans-serif;}
-.featured-title, .quantity .quantity-field, .cart_totals th, .rev_slider, h1, h2, h3, h4, h5, h6, .h5, .title.h5, table.table>tbody th, table.table>thead th, table.table>tfoot th, .search-notice-label, .filter-dark button, .filter:not(.filter-dark) button, .orderform .quantity-field, .product-top-meta, .onsale, .page-header .page-title, *:not(.widget)>.download, .btn, .button, .contact-number, .site-footer .widget_recent_entries a, .font1 {font-family: "Montserrat";font-weight: 500;}
-.breadcrumb {font-family: "Montserrat";}
-.btn.btn-xs, body, .alert, div.wpcf7-mail-sent-ng, div.wpcf7-validation-errors, .search-result-title, .contact-form .form-group label, .contact-form .form-group .wpcf7-not-valid-tip, .wpcf7 .form-group label, .wpcf7 .form-group .wpcf7-not-valid-tip, .heading-subtitle, .top-bar-style-2, .large-above-menu.style-2 .widget_anpstext {font-family: "Nunito";}
-nav.site-navigation ul li a, .menu-button, .megamenu-title {font-family: "Montserrat";font-weight: 500;}
-@media (max-width:1199px) {.site-navigation .main-menu li a {font-family: "Montserrat";font-weight: 500;}}
+.featured-title, .quantity .quantity-field, .cart_totals th, .rev_slider, h1, h2, h3, h4, h5, h6, .h5, .title.h5, table.table>tbody th, table.table>thead th, table.table>tfoot th, .search-notice-label, .filter-dark button, .filter:not(.filter-dark) button, .orderform .quantity-field, .product-top-meta, .onsale, .page-header .page-title, *:not(.widget)>.download, .btn, .button, .contact-number, .site-footer .widget_recent_entries a, .font1 {font-family: "Trebuchet MS",Helvetica,sans-serif;}
+.breadcrumb {font-family: "Trebuchet MS",Helvetica,sans-serif;}
+.btn.btn-xs, body, .alert, div.wpcf7-mail-sent-ng, div.wpcf7-validation-errors, .search-result-title, .contact-form .form-group label, .contact-form .form-group .wpcf7-not-valid-tip, .wpcf7 .form-group label, .wpcf7 .form-group .wpcf7-not-valid-tip, .heading-subtitle, .top-bar-style-2, .large-above-menu.style-2 .widget_anpstext {font-family: "Tahoma",Geneva,sans-serif;}
+nav.site-navigation ul li a, .menu-button, .megamenu-title {font-family: "Trebuchet MS",Helvetica,sans-serif;}
+@media (max-width:1199px) {.site-navigation .main-menu li a {font-family: "Trebuchet MS",Helvetica,sans-serif;}}
 body, .site-main .wp-caption p.wp-caption-text, .anps_menu_widget .menu a:before, .vc_gitem_row .vc_gitem-col.anps-grid .post-desc, .vc_gitem_row .vc_gitem-col.anps-grid-mansonry .post-desc, .alert, .projects-item .project-title, .product_meta, .btn.btn-wide, .btn.btn-lg, .breadcrumb li:before {font-size: 18px;}
 h1, .h1 {font-size: 26px;}
 h2, .h2 {font-size: 36px;}
