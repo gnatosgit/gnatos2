@@ -1,1 +1,3 @@
-.anps-header__bar {background-color: var(--anps-hbar-bg);}
+.anps-header__bar {
+    background-color: var(--anps-hbar-bg);
+}
