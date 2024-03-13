@@ -108,6 +108,7 @@
     --tnp-led-green: hsl(140, 70%, 40%);
     --tnp-led-gray: #ccc;
 
+    --tnp-card-radius: 5px;
 }
 
 #wpwrap {
@@ -156,6 +157,7 @@
     -moz-osx-font-smoothing: grayscale; /* Firefox */
     color: var(--tnp-text);
     font-weight: normal;
+    text-decoration: none;
 }
 
 .tnp-row-padded {
@@ -229,6 +231,8 @@
     text-shadow: none;
     width: auto;
     vertical-align: bottom;
+    font-weight: normal;
+    font-size: .9rem;
 }
 
 #tnp-body .button-secondary,
@@ -298,16 +302,25 @@
     margin-bottom: 1rem;
     margin-left: 0;
     margin-right: 0;
+    border-radius: 10px;
+    background-color: #fff;
+}
+
+#tnp-body .widefat thead {
+    color: var(--tnp-text) !important;
+    border-radius: 10px;
 }
 
 #tnp-body .widefat th {
     text-align: left;
 }
 
-#tnp-body .widefat thead {
-    background-color: #fff;
-    color: var(--tnp-text) !important;
+#tnp-body .widefat tbody tr:hover td,
+#tnp-body .widefat tbody tr:hover th
+{
+    background-color: #eee;
 }
+
 
 #tnp-body .widefat thead tr th {
     color: var(--tnp-text) !important;
@@ -317,12 +330,12 @@
     vertical-align: middle;
 }
 
-#tnp-body .widefat tbody tr:nth-child(odd) {
+/*#tnp-body .widefat tbody tr:nth-child(odd) {
     background-color: #f4faff;
-}
+}*/
 
 #tnp-body .widefat td a {
-    color: var(--tnp-text);
+    color: var(--tnp-blue);
 }
 
 table.clicks td {
@@ -374,6 +387,10 @@ table.clicks {
     font-weight: bold;
 }
 
+#tnp-wrap .tnp-notice a.tnpc-button {
+    font-weight: normal;
+}
+
 #tnp-wrap .tnp-notice.tnp-notice-warning {
     background-color: var(--tnp-orange-lighter);
     border-color: var(--tnp-orange-light)
@@ -407,21 +424,15 @@ table.clicks {
 }
 
 .tnp-tab-notice {
-    background-color: #fff;
-    border: 1px solid #eee;
-    border-left: 3px solid gray;
-    padding: 10px;
-    margin: 10px 0;
-    color: #444;
+    padding: 15px;
+    border: 1px dashed #999;
+    background-color: var(--tnp-blue-lighter);
 }
 
 .tnp-tab-warning {
-    background-color: #fff;
-    border: 1px solid #eee;
-    border-left: 3px solid orange;
-    padding: 10px;
-    margin: 10px 0;
-    color: #444;
+    padding: 15px;
+    border: 1px dashed #999;
+    background-color: var(--tnp-orange-lighter);
 }
 
 .tnp-tab-success {
@@ -434,12 +445,9 @@ table.clicks {
 }
 
 .tnp-tab-error {
-    background-color: #fff;
-    border: 1px solid #eee;
-    border-left: 3px solid red;
-    padding: 10px;
-    margin: 10px 0;
-    color: #444;
+    padding: 15px;
+    border: 1px dashed #999;
+    background-color: var(--tnp-red-light);
 }
 
 
@@ -770,6 +778,7 @@ iframe.tnp-editor-preview-desktop {
     color: #666;
     white-space: nowrap;
     line-height: normal;
+    font-size: .9em;
 }
 
 .tnp-progress-date {
@@ -1191,7 +1200,7 @@ span.tnp-user-status {
 
 #tnp-menu ul {
     padding: 0 20px 0 0;
-    margin: 0; 
+    margin: 0;
     list-style: none;
     position: relative;
     display: inline-table;
@@ -1207,7 +1216,7 @@ span.tnp-user-status {
 #tnp-menu ul li {
     float: left;
     margin: 0 10px;
-    padding: 0; 
+    padding: 0;
     border: 0;
 }
 
@@ -1222,6 +1231,9 @@ span.tnp-user-status {
     margin-right: 5px;
 }
 
+#tnp-menu ul li.tnp-menu-secondary a {
+    font-size: .95em;
+}
 
 /* Second level */
 
@@ -1232,7 +1244,7 @@ span.tnp-user-status {
     margin: 0;
     background: var(--tnp-menu-bg);
     border-radius: 0px;
-    position: absolute;  
+    position: absolute;
     padding-top: 20px;
     padding-bottom: 15px;
     box-shadow: 0 0px 5px #ccc;
@@ -1243,7 +1255,7 @@ span.tnp-user-status {
 }
 
 #tnp-menu ul ul li {
-    float: none; 
+    float: none;
     position: relative;
     margin-left: 0;
     margin-right: 0;
@@ -1269,7 +1281,7 @@ span.tnp-user-status {
     font-size: .9rem;
     outline: 0;
     box-shadow: 0;
-}	
+}
 
 #tnp-menu ul ul li:hover a {
     color: #fff;
@@ -1335,7 +1347,7 @@ span.tnp-user-status {
 #tnp-menu .tnp-licence-button-red:hover {
     background-color: var(--tnp-red-dark) !important;
     border: none;
-}/* 
+}/*
     The head section of each administration page with title and introduction
 */
 #tnp-heading {
@@ -1348,20 +1360,70 @@ span.tnp-user-status {
     border-bottom: 1px solid #d6d6d6;
     padding-bottom: .6rem;
     background-color: #f8f8f8;
-    
+
 }
 
 /* Title */
 #tnp-heading h2 {
     color: var(--tnp-title);
-    font-size: 1.2rem;
+    font-size: .9rem;
     line-height: normal;
     vertical-align: middle;
     font-weight: bold;
+    font-weight: normale;
     padding: 0;
     margin: 0px;
     margin-bottom: .5rem;
     text-transform: uppercase;
+}
+
+#tnp-heading h2 span {
+    background-color: transparent;
+    /*border: 1px solid #999;*/
+    font-weight: normal;
+    display: inline-block;
+    padding: .3rem 1rem;
+    font-size: .75em;
+    border-radius: 7px;
+    vertical-align: middle;
+    color: #444;
+    margin-left: 2em;
+    box-shadow: 0 0 3px #ccc;
+}
+
+#tnp-heading h2 span.tnp-badge-green {
+    background-color: green;
+    /*border: 1px solid #999;*/
+    font-weight: normal;
+    color: #fff;
+}
+
+#tnp-heading h2 span.tnp-badge-red {
+    background-color: red;
+    /*border: 1px solid #999;*/
+    font-weight: normal;
+    color: #fff;
+}
+
+#tnp-heading h2 span.tnp-badge-orange {
+    background-color: var(--tnp-orange);
+    /*border: 1px solid #999;*/
+    font-weight: normal;
+    color: #fff;
+}
+
+#tnp-heading h2 span.tnp-badge-blue {
+    background-color: var(--tnp-blue);
+    /*border: 1px solid #999;*/
+    font-weight: normal;
+    color: #fff;
+}
+
+#tnp-heading h2 span.tnp-badge-gray {
+    background-color: var(--tnp-gray-dark);
+    /*border: 1px solid #999;*/
+    font-weight: normal;
+    color: #fff;
 }
 
 #tnp-heading .tnp-title-help {
@@ -1434,7 +1496,7 @@ span.tnp-user-status {
 /* For pages that need a sub menu */
 #tnp-heading .tnp-nav {
     /*background-color: var(--tnp-gray);*/
-    padding: 5px 0;
+    padding: 5px 0 0 0;
     width: fit-content;
     font-size: 0; /* To rmeove the element spacing */
     line-height: normal;
@@ -1478,7 +1540,9 @@ span.tnp-user-status {
 #tnp-heading .tnp-nav li.active a {
     /*color: var(--tnp-text) !important;*/
     color: #000 !important;
-    font-weight: bold !important;
+    font-weight: normal !important;
+    display: inline-block;
+    border-bottom: 3px solid var(--tnp-title);
 }
 
 #tnp-heading .tnp-nav-title {
@@ -1758,11 +1822,13 @@ span.tnp-user-status {
 #tnp-body .ui-tabs .ui-tabs-nav {
     padding: 0;
     margin: 0;
-    background-color: var(--tnp-blue-light);
+    /*background-color: var(--tnp-blue-light);*/
+    background-color: #fff;
     border: 0;
     border-bottom-left-radius: 0;
     border-bottom-right-radius: 0;
     width: fit-content;
+    border-bottom: 1px solid #ddd;
 }
 
 #tnp-body .ui-tabs .ui-tabs-nav .ui-tabs-tab {
@@ -1773,18 +1839,21 @@ span.tnp-user-status {
 /* Tab labels */
 #tnp-body .ui-tabs a.ui-tabs-anchor,
 #tnp-body .ui-tabs a.ui-tabs-anchor:visited {
-    color: #fff;
+    /*color: #fff;*/
+    color:  #888;
     font-size: .9rem;
     box-shadow: none;
-    font-weight: bold;
+    font-weight: normal;
     outline: 0;
 }
 
 /* Active tab label */
 #tnp-body .ui-tabs .ui-state-active a.ui-tabs-anchor,
 #tnp-body .ui-tabs .ui-state-active a.ui-tabs-anchor:visited {
-    color: #555;
-    background-color: #fff;
+    /*color: #555;*/
+    color: #fff;
+    /*background-color: #fff;*/
+    background-color: var(--tnp-blue-light);
 }
 
 
@@ -1812,6 +1881,10 @@ span.tnp-user-status {
     font-size: 1rem;
     font-weight: bold;
     line-height: normal;
+}
+
+#tnp-body .tnp-tabs-advanced a {
+    font-style: italic;
 }
 
 
@@ -1980,7 +2053,11 @@ span.tnp-user-status {
 
 #tnp-body .form-table input,
 #tnp-body .form-table textarea,
-#tnp-body .form-table select
+#tnp-body .form-table select,
+#tnp-body .widefat input,
+#tnp-body .widefat textarea,
+#tnp-body .widefat select
+
 {
     border: var(--tnp-input-border);
 }
@@ -1989,7 +2066,6 @@ span.tnp-user-status {
 #tnp-body .widefat input::placeholder,
 #tnp-body .form-table textarea::placeholder,
 #tnp-body .widefat textarea::placeholder
-
 {
     font-style: italic;
     color: var(--tnp-gray-light);
@@ -2055,6 +2131,13 @@ span.tnp-user-status {
     width: 400px;
     max-width: 100%;
     background-color: #eee;
+    margin-bottom: .5rem;
+    padding: .5rem;
+    border-radius: 5px;
+}
+
+#tnp-body .tnpc-media img {
+    display: block;
 }
 
 #tnp-body .tnpc-media-remove {
