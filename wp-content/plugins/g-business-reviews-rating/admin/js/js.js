@@ -1862,151 +1862,228 @@ function google_business_reviews_rating_admin(popstate) {
 									}
 								}
 								
-								if (date_temp == null && language != null && language.match(/^(?:de|es|fr|it|nl|pl).*$/i) != null) {
+								if (date_temp == null && language != null && language.match(/^(?:cz|da|de|el|es|fr|hu|it|iw|ja|nl|pl|ko).*$/i) != null) {
 									time_unit = (review.relative_time_description.match(/^(?:[^\d]*)(\d{1,3})(?:[^\d]*)$/i) != null) ? parseInt(review.relative_time_description.replace(/^(?:[^\d]*)(\d{1,3})(?:[^\d]*)$/i, '$1')) : 1;
 									
 									for (k in relative_times) {
 										if (date_temp == null && (relative_times[k].singular && time_unit == 1 || !relative_times[k].singular && time_unit != 1)) {
 											switch (k) {
 											case 'hour':
-												if (language != null && (
-													language.match(/^fr/i) != null && review.relative_time_description.match(/^il\s+y\s+a\s+(?:1|une)\s+heure$/i) != null ||
+												if (
+													language.match(/^cz/i) != null && review.relative_time_description.match(/^právě\s+teď$/i) != null ||
+													language.match(/^da/i) != null && review.relative_time_description.match(/^nu$/i) != null ||
 													language.match(/^de/i) != null && review.relative_time_description.match(/^vor\s+(?:1|einer)\s+Stunde$/i) != null ||
+													language.match(/^el/i) != null && review.relative_time_description.match(/^πριν\s+από\s+μία\s+ώρα$/i) != null ||
 													language.match(/^es/i) != null && review.relative_time_description.match(/^hace\s+(?:1|una)\s+hora$/i) != null ||
+													language.match(/^fr/i) != null && review.relative_time_description.match(/^il\s+y\s+a\s+(?:1|une)\s+heure$/i) != null ||
+													language.match(/^hu/i) != null && review.relative_time_description.match(/^éppen\s+most$/i) != null ||
 													language.match(/^it/i) != null && review.relative_time_description.match(/^(?:1|un)[\s\'’]+ora\s+fa$/i) != null ||
+													language.match(/^iw/i) != null && review.relative_time_description.match(/^עַכשָׁיו$/i) != null ||
+													language.match(/^ja/i) != null && review.relative_time_description.match(/^ちょうど今$/i) != null ||
 													language.match(/^nl/i) != null && review.relative_time_description.match(/^net\s+nu$/i) != null ||
-													language.match(/^pl/i) != null && review.relative_time_description.match(/^(?:teraz|1\s+godzin[ay]?\s+temu)$/i) != null
-													)) {
+													language.match(/^pl/i) != null && review.relative_time_description.match(/^(?:teraz|1\s+godzin[ay]?\s+temu)$/i) != null ||
+													language.match(/^ko/i) != null && review.relative_time_description.match(/^지금$/i) != null
+													) {
 													date_temp = true;
 													break;
 												}
 												break;
 											case 'hours':
-												if (language != null && (
-													language.match(/^fr/i) != null && review.relative_time_description.match(/^il\s+y\s+a\s+\d+\s+heures$/i) != null ||
+												if (
+													language.match(/^cz/i) != null && review.relative_time_description.match(/^před\s+\d+\s+hodinami$/i) != null ||
+													language.match(/^da/i) != null && review.relative_time_description.match(/^\d+\s+timer\s+siden$/i) != null ||
 													language.match(/^de/i) != null && review.relative_time_description.match(/^vor\s+\d+\s+Stunden$/i) != null ||
+													language.match(/^el/i) != null && review.relative_time_description.match(/^πριν\s+από\s+\d+\s+ώρες$/i) != null ||
 													language.match(/^es/i) != null && review.relative_time_description.match(/^hace\s+\d+\s+horas$/i) != null ||
+													language.match(/^fr/i) != null && review.relative_time_description.match(/^il\s+y\s+a\s+\d+\s+heures$/i) != null ||
+													language.match(/^hu/i) != null && review.relative_time_description.match(/^\d+\s+órája$/i) != null ||
 													language.match(/^it/i) != null && review.relative_time_description.match(/^\d+\s+ore\s+fa$/i) != null ||
+													language.match(/^iw/i) != null && review.relative_time_description.match(/^לפני\s+\d+\s+שעות$/i) != null ||
+													language.match(/^ja/i) != null && review.relative_time_description.match(/^\d+\s*時間前$/i) != null ||
 													language.match(/^nl/i) != null && review.relative_time_description.match(/^\d+\s+uur\s+geleden$/i) != null ||
-													language.match(/^pl/i) != null && review.relative_time_description.match(/^\d+\s+godzin[ay]?\s+temu$/i) != null
-													)) {
+													language.match(/^pl/i) != null && review.relative_time_description.match(/^\d+\s+godzin[ay]?\s+temu$/i) != null ||
+													language.match(/^ko/i) != null && review.relative_time_description.match(/^\d+시간\s*전$/i) != null
+													) {
 													date_temp = true;
 													break;
 												}
 												break;
 											case 'day':
-												if (language != null && (
-													language.match(/^fr/i) != null && review.relative_time_description.match(/^il\s+y\s+a\s+(?:1|un)\s+jour$/i) != null ||
+												if (
+													language.match(/^cz/i) != null && review.relative_time_description.match(/^před\s+jedním\s+dnem$/i) != null ||
+													language.match(/^da/i) != null && review.relative_time_description.match(/^en\s+dag\s+siden$/i) != null ||
 													language.match(/^de/i) != null && review.relative_time_description.match(/^vor\s+(?:1|einem)\s+Tag$/i) != null ||
+													language.match(/^el/i) != null && review.relative_time_description.match(/^πριν\s+από\s+μία\s+ημέρα$/i) != null ||
 													language.match(/^es/i) != null && review.relative_time_description.match(/^hace\s+(?:1|un)\s+día$/i) != null ||
+													language.match(/^fr/i) != null && review.relative_time_description.match(/^il\s+y\s+a\s+(?:1|un)\s+jour$/i) != null ||
+													language.match(/^hu/i) != null && review.relative_time_description.match(/^\d+\s+napja$/i) != null ||
 													language.match(/^it/i) != null && review.relative_time_description.match(/^(?:1|un)\s+giorno\s+fa$/i) != null ||
+													language.match(/^iw/i) != null && review.relative_time_description.match(/^לפני\s*יום$/i) != null ||
+													language.match(/^ja/i) != null && review.relative_time_description.match(/^\d+\s*日前$/i) != null ||
 													language.match(/^nl/i) != null && review.relative_time_description.match(/^een\s+dag\s+geleden$/i) != null ||
-													language.match(/^pl/i) != null && review.relative_time_description.match(/^dzień\s+temu$/i) != null
-													)) {
+													language.match(/^pl/i) != null && review.relative_time_description.match(/^dzień\s+temu$/i) != null ||
+													language.match(/^ko/i) != null && review.relative_time_description.match(/^하루\s*전$/i) != null
+													) {
 													date_temp = true;
 													break;
 												}
 												break;
 											case 'days':
-												if (language != null && (
-													language.match(/^fr/i) != null && review.relative_time_description.match(/^il\s+y\s+a\s+\d+\s+jours$/i) != null ||
+												if (
+													language.match(/^cz/i) != null && review.relative_time_description.match(/^před\s+\d+\s+dny$/i) != null ||
+													language.match(/^da/i) != null && review.relative_time_description.match(/^\d+\s+dage\s+siden$/i) != null ||
 													language.match(/^de/i) != null && review.relative_time_description.match(/^vor\s+\d+\s+Tagen$/i) != null ||
+													language.match(/^el/i) != null && review.relative_time_description.match(/^πριν\s+από\s+\d+\s+ημέρες$/i) != null ||
 													language.match(/^es/i) != null && review.relative_time_description.match(/^hace\s+\d+\s+días$/i) != null ||
+													language.match(/^fr/i) != null && review.relative_time_description.match(/^il\s+y\s+a\s+\d+\s+jours$/i) != null ||
+													language.match(/^hu/i) != null && review.relative_time_description.match(/^\d+\s+napja$/i) != null ||
 													language.match(/^it/i) != null && review.relative_time_description.match(/^\d+\s+giorni\s+fa$/i) != null ||
+													language.match(/^iw/i) != null && review.relative_time_description.match(/^לפני\s*\d+\s*ימים$/i) != null ||
+													language.match(/^ja/i) != null && review.relative_time_description.match(/^\d+\s*日前$/i) != null ||
 													language.match(/^nl/i) != null && review.relative_time_description.match(/^\d+\s+dagen\s+geleden$/i) != null ||
-													language.match(/^pl/i) != null && review.relative_time_description.match(/^\d+\s+dni\s+temu$/i) != null
-													)) {
+													language.match(/^pl/i) != null && review.relative_time_description.match(/^\d+\s+dni\s+temu$/i) != null ||
+													language.match(/^ko/i) != null && review.relative_time_description.match(/^\d+일\s*전$/i) != null
+													) {
 													date_temp = true;
 													break;
 												}
 												break;
 											case 'within_week':
-												if (language != null && (
-													language.match(/^fr/i) != null && review.relative_time_description.match(/^la\s+semaine\s+dernière$/i) != null ||
+												if (
+													language.match(/^cz/i) != null && review.relative_time_description.match(/^tento\s+týden$/i) != null ||
+													language.match(/^da/i) != null && review.relative_time_description.match(/^for\s+mindre\s+end\s+en\s+uge\s+siden$/i) != null ||
 													language.match(/^de/i) != null && review.relative_time_description.match(/^in\s+der\s+letzten\s+Woche$/i) != null ||
+													language.match(/^el/i) != null && review.relative_time_description.match(/^αυτή\s+την\s+εβδομάδα$/i) != null ||
 													language.match(/^es/i) != null && review.relative_time_description.match(/^en\s+la\s+ultima\s+semana$/i) != null ||
+													language.match(/^fr/i) != null && review.relative_time_description.match(/^la\s+semaine\s+dernière$/i) != null ||
+													language.match(/^hu/i) != null && review.relative_time_description.match(/^előző\s+héten$/i) != null ||
 													language.match(/^it/i) != null && review.relative_time_description.match(/^nell[\s\'’]+ultima\s+settimana$/i) != null ||
+													language.match(/^iw/i) != null && review.relative_time_description.match(/^לפני\s*פחות\s*משבוע$/i) != null ||
+													language.match(/^ja/i) != null && review.relative_time_description.match(/^過去\s*\d+\s*週間以内$/i) != null ||
 													language.match(/^nl/i) != null && review.relative_time_description.match(/^in\s+de\s+afgelopen\s+week$/i) != null ||
-													language.match(/^pl/i) != null && review.relative_time_description.match(/^w\s+ostatnim\s+tygodniu$/i) != null
-													)) {
+													language.match(/^pl/i) != null && review.relative_time_description.match(/^w\s+ostatnim\s+tygodniu$/i) != null ||
+													language.match(/^ko/i) != null && review.relative_time_description.match(/^1주일\s*미만\s*전$/i) != null
+													) {
 													date_temp = true;
 													break;
 												}
 												break;
 											case 'week':
-												if (language != null && (
-													language.match(/^fr/i) != null && review.relative_time_description.match(/^il\s+y\s+a\s+(?:1|une)\s+semaine$/i) != null ||
+												if (
+													language.match(/^cz/i) != null && review.relative_time_description.match(/^před\s+týdnem$/i) != null ||
+													language.match(/^da/i) != null && review.relative_time_description.match(/^en\s+uge\s+siden$/i) != null ||
 													language.match(/^de/i) != null && review.relative_time_description.match(/^vor\s+(?:1|einer)\s+Woche$/i) != null ||
+													language.match(/^el/i) != null && review.relative_time_description.match(/^πριν\s+από\s+μία\s+εβδομάδα$/i) != null ||
 													language.match(/^es/i) != null && review.relative_time_description.match(/^hace\s+(?:1|una)\s+semana$/i) != null ||
+													language.match(/^fr/i) != null && review.relative_time_description.match(/^il\s+y\s+a\s+(?:1|une)\s+semaine$/i) != null ||
+													language.match(/^hu/i) != null && review.relative_time_description.match(/^egy\s+hete$/i) != null ||
 													language.match(/^it/i) != null && review.relative_time_description.match(/^(?:1|una)\s+settimana\s+fa$/i) != null ||
+													language.match(/^iw/i) != null && review.relative_time_description.match(/^לפני\s*שבוע$/i) != null ||
+													language.match(/^ja/i) != null && review.relative_time_description.match(/^一週間前$/i) != null ||
 													language.match(/^nl/i) != null && review.relative_time_description.match(/^een\s+week\s+geleden$/i) != null ||
-													language.match(/^pl/i) != null && review.relative_time_description.match(/^tydzień\s+temu$/i) != null
-													)) {
+													language.match(/^pl/i) != null && review.relative_time_description.match(/^tydzień\s+temu$/i) != null ||
+													language.match(/^ko/i) != null && review.relative_time_description.match(/^일주일\s*전$/i) != null
+													) {
 													date_temp = true;
 													break;
 												}
 												break;
 											case 'weeks':
-												if (language != null && (
-													language.match(/^fr/i) != null && review.relative_time_description.match(/^il\s+y\s+a\s+\d+\s+semaines$/i) != null ||
+												if (
+													language.match(/^cz/i) != null && review.relative_time_description.match(/^před\s+\d+\s+týdny$/i) != null ||
+													language.match(/^da/i) != null && review.relative_time_description.match(/^\d+\s+uger\s+siden$/i) != null ||
 													language.match(/^de/i) != null && review.relative_time_description.match(/^vor\s+\d+\s+Wochen$/i) != null ||
+													language.match(/^el/i) != null && review.relative_time_description.match(/^πριν\s+από\s+\d+\s+εβδομάδες$/i) != null ||
 													language.match(/^es/i) != null && review.relative_time_description.match(/^hace\s+\d+\s+semanas$/i) != null ||
+													language.match(/^fr/i) != null && review.relative_time_description.match(/^il\s+y\s+a\s+\d+\s+semaines$/i) != null ||
+													language.match(/^hu/i) != null && review.relative_time_description.match(/^\d+\s+hete$/i) != null ||
 													language.match(/^it/i) != null && review.relative_time_description.match(/^\d+\s+settimane\s+fa$/i) != null ||
+													language.match(/^iw/i) != null && review.relative_time_description.match(/^לפני\s*\d+\s*שבועות$/i) != null ||
+													language.match(/^ja/i) != null && review.relative_time_description.match(/^\d+\s*週間前$/i) != null ||
 													language.match(/^nl/i) != null && review.relative_time_description.match(/^\d+\s+weken\s+geleden$/i) != null ||
-													language.match(/^pl/i) != null && review.relative_time_description.match(/^\d+\s+tygodni\s+temu$/i) != null
-													)) {
+													language.match(/^pl/i) != null && review.relative_time_description.match(/^\d+\s+tygodni\s+temu$/i) != null ||
+													language.match(/^ko/i) != null && review.relative_time_description.match(/^'\d+주\s*전$/i) != null
+													) {
 													date_temp = true;
 													break;
 												}
 												break;
 											case 'month':
-												if (language != null && (
-													language.match(/^fr/i) != null && review.relative_time_description.match(/^il\s+y\s+a\s+(?:1|un)\s+mois$/i) != null ||
+												if (
+													language.match(/^cz/i) != null && review.relative_time_description.match(/^před\s+měsícem$/i) != null ||
+													language.match(/^da/i) != null && review.relative_time_description.match(/^for\s+en\s+måned\s+siden$/i) != null ||
 													language.match(/^de/i) != null && review.relative_time_description.match(/^vor\s+(?:1|einem)\s+Monat$/i) != null ||
+													language.match(/^el/i) != null && review.relative_time_description.match(/^πριν\s+από\s+μία\s+μήνα$/i) != null ||
 													language.match(/^es/i) != null && review.relative_time_description.match(/^hace\s+(?:1|un)\s+mes$/i) != null ||
+													language.match(/^fr/i) != null && review.relative_time_description.match(/^il\s+y\s+a\s+(?:1|un)\s+mois$/i) != null ||
+													language.match(/^hu/i) != null && review.relative_time_description.match(/^egy\s+hónapja$/i) != null ||
 													language.match(/^it/i) != null && review.relative_time_description.match(/^(?:1|un)\s+mese\s+fa$/i) != null ||
+													language.match(/^iw/i) != null && review.relative_time_description.match(/^לפני\s*חודש$/i) != null ||
+													language.match(/^ja/i) != null && review.relative_time_description.match(/^\d+\s*か月前$/i) != null ||
 													language.match(/^nl/i) != null && review.relative_time_description.match(/^een\s+maand\s+geleden$/i) != null ||
-													language.match(/^pl/i) != null && review.relative_time_description.match(/^miesiąc\s+temu$/i) != null
-													)) {
+													language.match(/^pl/i) != null && review.relative_time_description.match(/^miesiąc\s+temu$/i) != null ||
+													language.match(/^ko/i) != null && review.relative_time_description.match(/^한\s*달\s*전$/i) != null
+													) {
 													date_temp = true;
 													break;
 												}
 												break;
 											case 'months':
-												if (language != null && (
-													language.match(/^fr/i) != null && review.relative_time_description.match(/^il\s+y\s+a\s+\d+\s+mois$/i) != null ||
+												if (
+													language.match(/^cz/i) != null && review.relative_time_description.match(/^před\s+\d+\s+měsíci$/i) != null ||
+													language.match(/^da/i) != null && review.relative_time_description.match(/^\d+\s+måneder\s+siden$/i) != null ||
 													language.match(/^de/i) != null && review.relative_time_description.match(/^vor\s+\d+\s+Monaten$/i) != null ||
+													language.match(/^el/i) != null && review.relative_time_description.match(/^πριν\s+από\s+\d+\s+μήνες$/i) != null ||
 													language.match(/^es/i) != null && review.relative_time_description.match(/^hace\s+\d+\s+meses$/i) != null ||
+													language.match(/^fr/i) != null && review.relative_time_description.match(/^il\s+y\s+a\s+\d+\s+mois$/i) != null ||
+													language.match(/^hu/i) != null && review.relative_time_description.match(/^\d+\s+hónapja$/i) != null ||
 													language.match(/^it/i) != null && review.relative_time_description.match(/^\d+\s+mesi\s+fa$/i) != null ||
+													language.match(/^iw/i) != null && review.relative_time_description.match(/^לפני\s*\d+\s*חודשים$/i) != null ||
+													language.match(/^ja/i) != null && review.relative_time_description.match(/^\d+\s*か月前$/i) != null ||
 													language.match(/^nl/i) != null && review.relative_time_description.match(/^\d+\s+maanden\s+geleden$/i) != null ||
-													language.match(/^pl/i) != null && review.relative_time_description.match(/^\d+\s+miesi[ąę]c[ey](?:\s+temu)?$/i) != null
-													)) {
+													language.match(/^pl/i) != null && review.relative_time_description.match(/^\d+\s+miesi[ąę]c[ey](?:\s+temu)?$/i) != null ||
+													language.match(/^ko/i) != null && review.relative_time_description.match(/^\d+\s*달전$/i) != null
+													) {
 													date_temp = true;
 													break;
 												}
 												break;
 											case 'year':
-												if (language != null && (
-													language.match(/^fr/i) != null && review.relative_time_description.match(/^il\s+y\s+a\s+(?:1|un)\s+an$/i) != null ||
+												if (
+													language.match(/^cz/i) != null && review.relative_time_description.match(/^před\s+rokem$/i) != null ||
+													language.match(/^da/i) != null && review.relative_time_description.match(/^for\s+et\s+år\s+siden$/i) != null ||
 													language.match(/^de/i) != null && review.relative_time_description.match(/^vor\s+(?:1|einem)\s+Jahr$/i) != null ||
+													language.match(/^el/i) != null && review.relative_time_description.match(/^πριν\s+από\s+μία\s+έτος$/i) != null ||
 													language.match(/^es/i) != null && review.relative_time_description.match(/^hace\s+(?:1|una?)\s+año$/i) != null ||
+													language.match(/^fr/i) != null && review.relative_time_description.match(/^il\s+y\s+a\s+(?:1|un)\s+an$/i) != null ||
+													language.match(/^hu/i) != null && review.relative_time_description.match(/^egy\s+éve$/i) != null ||
 													language.match(/^it/i) != null && review.relative_time_description.match(/^(?:1|un)\s+anno\s+fa$/i) != null ||
+													language.match(/^iw/i) != null && review.relative_time_description.match(/^לפני\s*שנה$/i) != null ||
+													language.match(/^ja/i) != null && review.relative_time_description.match(/^\d+\s*年前$/i) != null ||
 													language.match(/^nl/i) != null && review.relative_time_description.match(/^een\s+jaar\s+geleden$/i) != null ||
-													language.match(/^pl/i) != null && review.relative_time_description.match(/^rok\s+temu$/i) != null
-													)) {
+													language.match(/^pl/i) != null && review.relative_time_description.match(/^rok\s+temu$/i) != null ||
+													language.match(/^ko/i) != null && review.relative_time_description.match(/^일년\s*전$/i) != null
+													) {
 													date_temp = true;
 													break;
 												}
 												break;
 											case 'years':
-												if (language != null && (
-													language.match(/^fr/i) != null && review.relative_time_description.match(/^il\s+y\s+a\s+\d+\s+ans$/i) != null ||
+												if (
+													language.match(/^cz/i) != null && review.relative_time_description.match(/^před\s+\d+\s+lety$/i) != null ||
+													language.match(/^da/i) != null && review.relative_time_description.match(/^\d+\s+år\s+siden$/i) != null ||
 													language.match(/^de/i) != null && review.relative_time_description.match(/^vor\s+\d+\s+Jahren$/i) != null ||
+													language.match(/^el/i) != null && review.relative_time_description.match(/^πριν\s+από\s+\d+\s+έτη$/i) != null ||
 													language.match(/^es/i) != null && review.relative_time_description.match(/^hace\s+\d+\s+años$/i) != null ||
+													language.match(/^fr/i) != null && review.relative_time_description.match(/^il\s+y\s+a\s+\d+\s+ans$/i) != null ||
+													language.match(/^hu/i) != null && review.relative_time_description.match(/^\d+\s+éve$/i) != null ||
 													language.match(/^it/i) != null && review.relative_time_description.match(/^\d+\s+anni\s+fa$/i) != null ||
+													language.match(/^iw/i) != null && review.relative_time_description.match(/^לפני\s*\d+\s*ש$/i) != null ||
+													language.match(/^ja/i) != null && review.relative_time_description.match(/^\d+\s*年前$/i) != null ||
 													language.match(/^nl/i) != null && review.relative_time_description.match(/^\d+\s+jaar\s+geleden$/i) != null ||
-													language.match(/^pl/i) != null && review.relative_time_description.match(/^\d+\s+lat[a]?\s+temu$/i) != null
-													)) {
+													language.match(/^pl/i) != null && review.relative_time_description.match(/^\d+\s+lat[a]?\s+temu$/i) != null ||
+													language.match(/^ko/i) != null && review.relative_time_description.match(/^\d+\s*년\s*전$/i) != null
+													) {
 													date_temp = true;
 													break;
 												}

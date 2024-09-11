@@ -6,8 +6,8 @@
 	--gmbrr-shortcodes: #56a53e;
 	--gmbrr-reviews: #b78600;
 	--gmbrr-data: #229adb;
-	--gmbrr-about: #b42c70;
-	--gmbrr-advanced: #e75427;
+	--gmbrr-advanced: #b42c70;
+	--gmbrr-about: #e75427;
 }
 @keyframes signature-line-draw {
 	0% {
@@ -1406,8 +1406,10 @@
 }
 .google-business-reviews-rating #about .icon.icon-x {
 	display: inline-block;
-	width: 1.4em;
+	width: 1.6em;
 	aspect-ratio: 1;
+	margin-block: 0 -0.15em;
+	margin-inline: -0.2rem 0rem;
 	vertical-align: middle;
 	line-height: 100%;
 }
@@ -1832,11 +1834,11 @@
 	}
 	.google-business-reviews-rating .nav-tab.advanced:hover,
 	.google-business-reviews-rating .nav-tab.nav-tab-active.advanced {
-		color: var(--gmbrr-about);
+		color: var(--gmbrr-advanced);
 	}
 	.google-business-reviews-rating .nav-tab.about:hover,
 	.google-business-reviews-rating .nav-tab.nav-tab-active.about {
-		color: var(--gmbrr-advanced);
+		color: var(--gmbrr-about);
 	}
 	.google-business-reviews-rating .nav-tab .icon {
 		display: inline-block;
@@ -2167,6 +2169,31 @@
 	.google-business-reviews-rating #reviews-import-table {
 		display: table;
 	}
+	.admin-bar .google-business-reviews-rating #shortcodes .wp-list-table tbody > tr:first-child,
+	.admin-bar .google-business-reviews-rating #reviews .wp-list-table thead > tr:first-child,
+	.admin-bar .google-business-reviews-rating #reviews-import-table thead > tr:first-child {
+		position: sticky;
+		inset-block-start: 2rem;
+		box-shadow: 0 2px #fdfdfd; 
+		z-index: 2;
+	}
+	.admin-bar .google-business-reviews-rating #shortcodes .wp-list-table tbody > tr:first-child {
+		background-color: color-mix(in lab, var(--gmbrr-shortcodes) 70%, #767676);
+	}
+	.admin-bar .google-business-reviews-rating #reviews .wp-list-table thead > tr:first-child {
+		background-color: color-mix(in lab, var(--gmbrr-star-color) 80%, #FFF);
+	}
+	.admin-bar .google-business-reviews-rating #reviews-import-table thead > tr:first-child {
+		background-color: var(--gmbrr-advanced);
+	}
+	.admin-bar .google-business-reviews-rating #shortcodes .wp-list-table tbody > tr:first-child th,
+	.admin-bar .google-business-reviews-rating #reviews-import-table thead > tr:first-child th {
+		color: #ffffff;
+	}
+	.admin-bar .google-business-reviews-rating #reviews .wp-list-table thead > tr:first-child th,
+	.admin-bar .google-business-reviews-rating #reviews .wp-list-table thead > tr:first-child th a {
+		color: #000000;
+	}
 	.google-business-reviews-rating .parameters .parameter,
 	.google-business-reviews-rating .classes .class {
 		width: 13%;
@@ -2283,7 +2310,7 @@
 		display: flex;
 	}
 	.google-business-reviews-rating #reviews .review-filter + .reviews-table {
-		min-height: calc(100vh - 24.6rem);
+		min-height: calc(100vh - 24.8rem);
 	}
 	.google-business-reviews-rating .reviews-table .language,
 	.google-business-reviews-rating .reviews-table .place-id,

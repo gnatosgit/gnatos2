@@ -6,10 +6,29 @@
         let metaBoxContent = '#wpacu_meta_box_content';
 
         return {
+            getParameterByName: function(name, url = window.location.href) {
+                // Source: https://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
+                name = name.replace(/[\[\]]/g, '\\$&');
+                var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+                    results = regex.exec(url);
+                if (!results) return null;
+                if (!results[2]) return '';
+                return decodeURIComponent(results[2].replace(/\+/g, ' '));
+            },
+
             cssJsManagerActions: function () {
+                // When editing the CSS/JS manager in an edit post page (legacy), update the "wpacu_object" when the retrieval method is changed
+                // This is required, Ssnce the Gutenberrg editor is likely used, AJAX calls will be made to update the CSS/JS rules
+                // after the "Submit" button is clicked (without any standard page reloading)
+                $(document).on('click change', 'input.wpacu-dom-get-type-from-css-js-manager', function() {
+                    if (typeof wpacu_object.dom_get_type !== 'undefined' && wpacu_object.dom_get_type) {
+                        wpacu_object.dom_get_type = $(this).val();
+                    }
+                });
+
                 let cbSelector = '.input-unload-on-this-page',
                     cbSelectorNotLocked = '.input-unload-on-this-page.wpacu-not-locked',
-                    cbSelectorMakeExceptionOnPage = '.wpacu_load_it_option_one.wpacu_load_exception',
+                    cbSelectorMakeExceptionOnPage = '.wpacu_load_it_option_on_this_page.wpacu_load_exception',
                     handle, handleFor, $targetedAssetRow;
 
                 // live() is deprecated and if used and jQuery Migrate is disabled
@@ -21,6 +40,10 @@
                     if ($(this).prop('checked')) {
                         if (event.type === 'click' && (! $.fn.wpAssetCleanUp().triggerAlertWhenAnyUnloadRuleIsChosen(handle, handleFor))) {
                             return false;
+                        }
+
+                        if ($('#wpacu_load_it_option_'+ handleFor + '_' + handle).is(':checked')) {
+                            $('#wpacu_load_it_option_'+ handleFor + '_' + handle).prop('checked', false).trigger('change');
                         }
 
                         $.fn.wpAssetCleanUp().uncheckAllOtherBulkUnloadRules($(this), false); // skip Unload via RegEx as both can be used
@@ -67,7 +90,7 @@
                 /*
                 * [Start] Make exception, Load it on this page
                 */
-                // Check All
+                // Check all, when the assets are sorted by their location
                 $('.wpacu-area-check-load-all').on('click change', function (e) {
                     e.preventDefault();
 
@@ -81,7 +104,7 @@
                     $wpacuPluginList.find(cbSelectorNotLocked).prop('checked', false).trigger('change');
                 });
 
-                // Uncheck All
+                // Uncheck all, when the assets are sorted by their location
                 $('.wpacu-area-uncheck-load-all').on('click change', function (e) {
                     e.preventDefault();
 
@@ -111,7 +134,7 @@
                 });
 
                 // Unload on All Pages of post/page/custom post type / site-wide (everywhere) / based on taxonomy
-                $(document).on('click change', '.wpacu_bulk_unload', function (event) {
+                $(document).on('change', '.wpacu_bulk_unload', function (event) {
                     handle = $(this).attr('data-handle');
                     handleFor = $(this).attr('data-handle-for'); // 'style' or 'script' (e.g. 'contact-form-7' has the same name for both)
                     $targetedAssetRow = $('[data-' + handleFor + '-handle-row="' + handle + '"]');
@@ -127,7 +150,9 @@
                             return false;
                         }
 
-                        if ($(this).hasClass('wpacu_global_unload') || $(this).hasClass('wpacu_post_type_unload')) {
+                        if ($(this).hasClass('wpacu_global_unload') ||
+                            $(this).hasClass('wpacu_post_type_unload')
+                        ) {
                             /*
                              * Clicked: "Unload site-wide" (.wpacu_global_unload) or "Unload on all posts of the same [post_type]" (.wpacu_post_type_unload)
                              */
@@ -154,20 +179,18 @@
                             $('.input-unload-on-this-page[data-handle-for="' + handleFor + '"][data-handle="' + handle + '"]')
                                 .prop('checked', false);
                         }
-                        //wpAssetCleanUp.uncheckAllOtherBulkUnloadRules($(this));
-                        //$(this).closest('tr').find('.wpacu_remove_site_wide_rule').prop('checked', true);
-                    } else {
+                        } else {
                         /***********************************************************************************
                          * STATE 2: The checkbox IS UNCHECKED / UNMARKED (the multiple drop-down is hidden)
                          ***********************************************************************************
                          */
-                        if (!$(this).hasClass('wpacu_unload_it_regex_checkbox') && !$(this).hasClass('wpacu_unload_it_via_tax_checkbox')) {
+                        if ( ! $(this).hasClass('wpacu_unload_it_regex_checkbox') && ! $(this).hasClass('wpacu_unload_it_post_type_via_tax_checkbox') ) {
                             /*
                              * Clicked: "Unload site-wide" or "Unload on all posts of the same [post_type]"
                              */
                             $(this).parent('label').removeClass('wpacu_input_load_checked');
                             $(this).closest('tr').removeClass('wpacu_not_load');
-                        } else if ($(this).hasClass('wpacu_unload_it_regex_checkbox')) {
+                        } else if ( $(this).hasClass('wpacu_unload_it_regex_checkbox') ) {
                             /*
                              * "Unload via RegEx" is clicked
                              */
@@ -184,18 +207,12 @@
                                 $parentLi.find('.wpacu_handle_unload_regex_input_wrap')
                                     .addClass('wpacu_hide'); // Hide the input area
                             }
-                        } else if ($(this).hasClass('wpacu_unload_it_via_tax_checkbox')) {
+                        } else if ( $(this).hasClass('wpacu_unload_it_post_type_via_tax_checkbox') ) {
                             /*
-                             * "Unload via taxonomy" is clicked
+                             * "Unload via taxonomy" (post type) is clicked
                              */
                             $parentLi.find('label').removeClass('wpacu_unload_checked');
-                            /*
-                            $parentLi.find('select')
-                                .blur() // lose focus
-                                .addClass('wpacu_disabled');
-                            */
-                            //$parentLi.find('select').prop('disabled', true).val(''); // unchecked with no value added to the input
-                            $parentLi.find('.wpacu_handle_unload_via_tax_input_wrap').addClass('wpacu_hide'); // Hide the input area
+                            $parentLi.find('.wpacu_handle_manage_post_type_via_tax_input_wrap').addClass('wpacu_hide'); // Hide the input area
                         }
 
                         // [wpacu_lite]
@@ -212,7 +229,7 @@
                     }
                 });
 
-                // Load it on this page
+                // "Load it on this page" / "Load it on all pages of this post type" is clicked
                 $(document).on(
                     'click change', // when these actions are taken
                     cbSelectorMakeExceptionOnPage + ',' + '.wpacu_load_it_option_post_type', // on these elements
@@ -231,12 +248,64 @@
                                 asset_type = 'script';
                             }
 
-                            $('#' + asset_type + '_' + handle).prop('checked', false).trigger('change');
+                            let unloadOnThisPageCurrentHandle = '#' + asset_type + '_' + handle,
+                                loadOnThisPageCurrentHandle = '#wpacu_load_it_option_' + asset_type + '_' + handle;
+
+                            // "Load it on this page" was clicked, and it checked
+                            if ($(this).hasClass('wpacu_load_it_option_on_this_page')) {
+                                // If "Unload on this page" is checked, and "Load it on this page" is checked as well (as it's the case if this area is reached)
+                                // Make sure both are turned off as they cancel each other (do not make any sense)
+                                if ( $(unloadOnThisPageCurrentHandle).is(':checked') ) {
+                                    $(unloadOnThisPageCurrentHandle).prop('checked', false).trigger('change');
+                                    $(this).prop('checked', false).trigger('change');
+                                }
+
+                                // e.g. If "On this page" (load exception) is clicked, 'On all pages of "post" post type' gets unchecked (if already checked)
+                                // As it doesn't make any sense to have both checked
+                                if ( $('#wpacu_load_it_option_post_type_' + asset_type + '_' + handle).is(':checked') ) {
+                                    $('#wpacu_load_it_option_post_type_' + asset_type + '_' + handle).prop('checked', false).trigger('change');
+                                }
+
+                                $(this).closest('tr').removeClass('wpacu_not_load');
+                            }
+                            // e.g. If 'On all pages of "post" post type' is clicked, "On this page" gets unchecked (if already checked)
+                            // As it doesn't make any sense to have both checked
+                            else if ($(this).hasClass('wpacu_load_it_option_post_type')) {
+                                if ($(loadOnThisPageCurrentHandle).is(':checked')) {
+                                    $(loadOnThisPageCurrentHandle).prop('checked', false).trigger('change');
+                                } else if ($('#wpacu_global_unload_post_type_' + asset_type + '_' + handle).is(':checked')) {
+                                    $('#wpacu_global_unload_post_type_' + asset_type + '_' + handle).prop('checked', false).trigger('change');
+                                    $(this).prop('checked', false).trigger('change');
+                                } else {
+                                    $(this).closest('tr').removeClass('wpacu_not_load');
+                                }
+                            }
                         } else {
                             $(this).parent('label').removeClass('wpacu_global_unload_exception');
                         }
                     }
                 );
+
+                // Put back the red background in case all load exceptions were unchecked
+                // and there's an unloading option there such as "site-wide" or "on all pages of [post] type"
+                $(document).on('click change', '.wpacu_load_exception', function() {
+                    handle    = $(this).attr('data-handle');
+                    handleFor = $(this).attr('data-handle-for'); // "style" or "script"
+
+                    let targetedTr = 'tr.wpacu_asset_row.' + handleFor + '_' + handle;
+
+                    if ( ! $(targetedTr).find('.wpacu_load_exception').is(':checked') ) {
+                        // When the red background was already there (rule set before the CSS/JS manager was loaded)
+                        if ($(targetedTr).hasClass('wpacu_is_bulk_unloaded')) {
+                           $(targetedTr).addClass('wpacu_not_load');
+                        }
+
+                        // When the rule is set on the spot (after the CSS/JS manager loads), and the red background shows up
+                        if ($(targetedTr).find('.wpacu_bulk_unload').is(':checked')) {
+                            $(targetedTr).addClass('wpacu_not_load');
+                        }
+                    }
+                });
 
                 // Handle Notes
                 $(document).on('click', '.wpacu-add-handle-note', function (e) {
@@ -385,7 +454,7 @@
 
                 // Dashicons
                 if (handle === 'dashicons' && handleFor === 'style') {
-                    if ($('input[name="wpacu_ignore_child[styles][nf-display]').length > 0 && !confirm(wpacu_object.dashicons_unload_alert_ninja_forms)) {
+                    if ($('input[name="wpacu_ignore_child[styles][nf-display]').length > 0 && !confirm(wpacu_object.dashicons_unload_alert_ninja_forms_alert)) {
                         return false;
                     }
                 }
@@ -548,6 +617,11 @@
                     'time_r'            : new Date().getTime()
                 };
 
+                if ($.fn.wpAssetCleanUp().getParameterByName('page') === wpacu_object.plugin_prefix + '_assets_manager') {
+                    // Called from plugin's own area: "CSS & JS MANAGER" -- "MANAGE CSS/JS"
+                    dataGetLoadedAssets['called_from_plugin_own_asset_manager'] = true;
+                }
+
                 if ($('#wpacu_manage_singular_page_assets').length > 0) { // e.g. /wp-admin/admin.php?page=wpassetcleanup_assets_manager
                     dataGetLoadedAssets['is_for_singular'] = true;
                 }
@@ -564,13 +638,12 @@
                     }
 
                     if ($('#wpacu_dash_assets_manager_form').length > 0) {
-                        $('#submit').show();
+                        $('#wpacu-update-button-area .submit input').removeClass('hidden');
                     }
 
                     setTimeout(function () {
                         $.fn.wpAssetCleanUp().cssJsManagerActions();
                         $('.wpacu_asset_row, .wpacu-page-options .wpacu-assets-collapsible-content').removeClass('wpacu_loading'); // hide loading spinner after post is updated
-                        $('#wpacu-assets-reloading').remove();
 
                         $.fn.wpAssetCleanUp().wpacuCheckSourcesFor404Errors();
                     }, 200);
@@ -603,7 +676,7 @@
                         $(metaBoxContent).html(response);
 
                         $('.wpacu_asset_row, .wpacu-page-options .wpacu-assets-collapsible-content').removeClass('wpacu_loading'); // hide loading spinner after post is updated
-                        $('#wpacu-assets-reloading').remove();
+                        $('#wpacu-assets-reloading-in-edit-post-area').remove();
                     });
 
                     return;
@@ -666,6 +739,15 @@
                         'time_r':             new Date().getTime()
                     };
 
+                    if ($.fn.wpAssetCleanUp().getParameterByName('page') === wpacu_object.plugin_prefix + '_assets_manager') {
+                        // Called from plugin's own area: "CSS & JS MANAGER" -- "MANAGE CSS/JS"
+                        dataGetLoadedAssets['called_from_plugin_own_asset_manager'] = true;
+                    }
+
+                    if ($('#wpacu_manage_singular_page_assets').length > 0) { // e.g. /wp-admin/admin.php?page=wpassetcleanup_assets_manager
+                        dataGetLoadedAssets['is_for_singular'] = true;
+                    }
+
                     $.post(wpacu_object.ajax_url, dataGetLoadedAssets, function (response) {
                         if (!response) {
                             return false;
@@ -674,15 +756,17 @@
                         $(metaBoxContent).html(response);
 
                         if ($('#wpacu_dash_assets_manager_form').length > 0) {
-                            $('#submit').show();
+                            $('#wpacu-update-button-area .submit input').removeClass('hidden');
                         }
 
                         setTimeout(function () {
                             $.fn.wpAssetCleanUp().cssJsManagerActions();
 
-                            setTimeout(function () {
-                                $.fn.wpAssetCleanUp().wpacuCheckSourcesFor404Errors();
-                            }, 100);
+                            if ($('#wpacu-assets-reloading-in-edit-post-area').length > 0) {
+                                $('#wpacu-assets-reloading-in-edit-post-area').remove();
+                            }
+
+                            $.fn.wpAssetCleanUp().wpacuCheckSourcesFor404Errors();
                         }, 200);
                     });
                 }
@@ -709,14 +793,14 @@
                     'wpacu_nonce'     : wpacu_object.wpacu_print_loaded_hardcoded_assets_nonce
                 };
 
-                if ($.fn.wpAssetCleanUpFrontendCssJsManagerArea().getParameterByName('wpacu_ignore_no_load_option') !== null) {
+                if ($.fn.wpAssetCleanUp().getParameterByName('wpacu_ignore_no_load_option') !== null) {
                     dataGetLoadedHardcodedAssets['wpacu_ignore_no_load_option'] = 1;
                 }
 
                 $.post(wpacu_object.ajax_url, dataGetLoadedHardcodedAssets, function (response) {
                     let $mainJQuerySelector = '#wpacu-assets-collapsible-wrap-hardcoded-list';
 
-                    if (!response) {
+                    if ( ! response ) {
                         return;
                     }
 
@@ -728,8 +812,7 @@
                     let responseJson = JSON.parse(response);
 
                     $($mainJQuerySelector).find('> .wpacu-assets-collapsible-content').html(responseJson.output);
-                    $($mainJQuerySelector).find('a.wpacu-assets-collapsible')
-                        .append(' &#10141; Total: ' + parseInt(responseJson.total_hardcoded_assets));
+                    $($mainJQuerySelector).find('a.wpacu-assets-collapsible').append(responseJson.after_hardcoded_title);
                 });
             },
 
@@ -929,8 +1012,17 @@ jQuery(document).ready(function($) {
                 * Settings: Sub-tab within tab clicked
                 */
                 $(document).on('click', 'input[name="wpacu_sub_tab_area"]', function () {
-                    if ($(this).prop('checked')) {
-                        $('#wpacu-selected-sub-tab-area').val($(this).val());
+                    $('.wpacu-sub-tabs-item').removeClass('wpacu-visible');
+
+                    if ($(this).is(':checked')) {
+                        let refId = $(this).attr('id');
+                        $('#'+ refId +'-area').addClass('wpacu-visible');
+
+                        let $mainTabArea = $(this).parent('.wpacu-sub-tabs-wrap').parent('.wpacu-settings-tab-content');
+                        let mainTabAreaId = $mainTabArea.attr('id');
+
+                        $.fn.wpAssetCleanUpSettingsArea().updateUriParamWithTabArea(mainTabAreaId);
+                        $.fn.wpAssetCleanUpSettingsArea().updateUriParamWithSubTabArea($(this).val());
                     }
                 });
 
@@ -978,11 +1070,9 @@ jQuery(document).ready(function($) {
                 $(document).on('click', '#wpacu_dashboard', function() {
                     if ($(this).prop('checked')) {
                         $('#wpacu-settings-assets-retrieval-mode').show();
-                        //$('#wpacu_hide_meta_boxes_for_post_types_chosen .chosen-choices, #wpacu-hide-meta-boxes-for-post-types-info').css({'opacity':1});
-                    } else {
+                        } else {
                         $('#wpacu-settings-assets-retrieval-mode').hide();
-                        //$('#wpacu_hide_meta_boxes_for_post_types_chosen .chosen-choices, #wpacu-hide-meta-boxes-for-post-types-info').css({'opacity':0.4});
-                    }
+                        }
                 });
 
                 // "Manage in the Dashboard?" radio selection
@@ -1015,15 +1105,21 @@ jQuery(document).ready(function($) {
                     }
                 });
 
-                if ( $('#wpacu-allow-manage-assets-to-select-list-area').length > 0
-                    && ( ! $('#wpacu-allow-manage-assets-to-select-list-area').hasClass('wpacu_hide') ) ) {
+                if (  $('#wpacu-allow-manage-assets-to-select-list-area').length > 0 &&
+                    ! $('#wpacu-allow-manage-assets-to-select-list-area').hasClass('wpacu_hide') &&
+                      $('#wpacu-allow-manage-assets-to-select-list').hasClass('wpacu_chosen_can_be_later_enabled')
+                ) {
                     setTimeout(function() { jQuery('#wpacu-allow-manage-assets-to-select-list').chosen(); }, 200);
                 }
 
                 $('#wpacu-allow-manage-assets-to-select').on('click change', function() {
                     if ($(this).val() === 'chosen') {
                         $('#wpacu-allow-manage-assets-to-select-list-area').removeClass('wpacu_hide');
-                        setTimeout(function() { jQuery('#wpacu-allow-manage-assets-to-select-list').chosen(); }, 200);
+                        setTimeout(function() {
+                            if (jQuery('#wpacu-allow-manage-assets-to-select-list').hasClass('wpacu_chosen_can_be_later_enabled')) {
+                                jQuery('#wpacu-allow-manage-assets-to-select-list').chosen();
+                            }
+                        }, 200);
                     } else {
                         $('#wpacu-allow-manage-assets-to-select-list-area').addClass('wpacu_hide');
                     }
@@ -1098,22 +1194,155 @@ jQuery(document).ready(function($) {
                     }
                 });
 
+                $(document).on('click', '.wpacu-add-new-no-features-rule-row', function(e) {
+                    e.preventDefault();
+
+                    // Show the spinner
+                    let $spinnerAfterLink = $(this).next('.wpacu-add-new-no-features-rule-row-loader');
+                    $spinnerAfterLink.show();
+
+                    $.get(wpacu_object.ajax_url, {
+                        'action'      : wpacu_object.plugin_prefix + '_add_new_no_features_load_row',
+                        'time_r'      : new Date().getTime()
+                    }, function (newRowOutput) {
+                        $('#wpacu-prevent-feature-rule-areas-wrap').append(newRowOutput);
+
+                        let $lastNoFeatureAreaWithChosen = $('#wpacu-prevent-feature-rule-areas-wrap > .wpacu-prevent-feature-rule-area:last')
+                            .find('.wpacu_chosen_can_be_later_enabled');
+
+                        if ($lastNoFeatureAreaWithChosen.length > 0) {
+                            $lastNoFeatureAreaWithChosen.chosen();
+                        }
+
+                        // Hide the spinner
+                        $spinnerAfterLink.hide();
+                    });
+                });
+
+                $(document).on('click', '.wpacu-delete-no-features-rule-row', function(e) {
+                    e.preventDefault();
+                    let $lastNoFeatureArea = $(this).parent('.wpacu-prevent-feature-rule-area');
+                    $lastNoFeatureArea.find(':input').prop('disabled', true);
+                    $lastNoFeatureArea.remove();
+                });
+
                 // Submit button (Dashboard) is clicked
-                let $settingSubmitBtn = $('#wpacu-update-button-area input[type="submit"]');
+                let settingSubmitBtn = '#wpacu-update-button-area input[type="submit"]';
 
                 // Show the loading spinner
                 $(document).on('submit', '#wpacu-settings-form, .wpacu_settings_form', function() {
-                    $settingSubmitBtn.attr('disabled', true);
+                    $(settingSubmitBtn).attr('disabled', true);
                     $('#wpacu-updating-settings').addClass('wpacu-show').removeClass('wpacu-hide');
                 });
 
                 // Once the form is submitted, disable the submit button to prevent any double submission
                 // Settings & Homepage Buttons
                 $(document).on('submit', 'form#wpacu-settings-form, form#wpacu_dash_assets_manager_form', function() {
-                    $settingSubmitBtn.attr('disabled', true);
+                    $(settingSubmitBtn).attr('disabled', true);
                     $('#wpacu-updating-settings').show();
                     return true;
                 });
+
+                // [START] Auto-complete user search drop-down (for plugin access)
+                // Auto-complete search is enabled in "Settings" -- "Plugin Usage Preferences" -- "Plugin Access" -- "Give access for specific non-administrator users"
+                // The regular drop-dowmn was not used, as there are lots of WordPress users added in the database
+                var nonAdminUsersDdSearchTarget = '#wpacu-access-via-specific-users-dd-search';
+
+                if ($(nonAdminUsersDdSearchTarget).length > 0) {
+                    // Add non-admin user to the list
+                    $(document).on('change', nonAdminUsersDdSearchTarget, function () {
+                        var chosenUserId = $(nonAdminUsersDdSearchTarget).chosen().val();
+
+                        if ($('[data-wpacu-non-admin-chosen-user-id="' + chosenUserId + '"]').length < 1) {
+                            $('#wpacu-access-via-specific-user-adding-notice').removeClass('wpacu_hide');
+
+                            $(nonAdminUsersDdSearchTarget).prop('disabled', true);
+
+                            $(nonAdminUsersDdSearchTarget).empty();
+                            $(nonAdminUsersDdSearchTarget).append('<option value=""></option>');
+                            $(nonAdminUsersDdSearchTarget).trigger('liszt:updated').trigger('chosen:updated');
+
+                            // Append it
+                            $.ajax({
+                                method: 'post',
+                                url: wpacu_object.ajax_url,
+                                data: {
+                                    action: wpacu_object.plugin_prefix + '_add_non_admin_users_to_chosen_list',
+                                    wpacu_user_id: chosenUserId,
+                                    wpacu_time_r: new Date().getTime()
+                                },
+                                cache: false,
+                                success: function (response) {
+                                    $('[data-wpacu-non-admin-chosen-users-list]')
+                                        .append(response)
+                                        .children(':last')
+                                        .hide()
+                                        .fadeIn(300, function () {
+                                            $('#wpacu-access-via-specific-user-adding-notice').addClass('wpacu_hide');
+                                            $(nonAdminUsersDdSearchTarget).prop('disabled', false);
+                                            $(nonAdminUsersDdSearchTarget).trigger('liszt:updated').trigger('chosen:updated');
+                                        });
+                                }
+                            });
+                        } else {
+                            alert('You have already chosen this non-admin user to get plugin access.');
+
+                            $(nonAdminUsersDdSearchTarget).empty();
+                            $(nonAdminUsersDdSearchTarget).append('<option value=""></option>');
+                            $(nonAdminUsersDdSearchTarget).trigger('liszt:updated').trigger('chosen:updated');
+
+                            return false;
+                        }
+                    });
+
+                    // Remove non-admin user from the list
+                    $(document).on('click', '[data-clear-wpacu-non-admin-chosen-user-id]', function (e) {
+                        e.preventDefault();
+
+                        var chosenUserId = $(this).attr('data-clear-wpacu-non-admin-chosen-user-id');
+
+                        $('[data-wpacu-non-admin-chosen-user-id="' + chosenUserId + '"]').fadeOut(300, function () {
+                            $(this).remove();
+                        });
+                    });
+
+                    var wpacuAccessViaSpecificUserSearchInput = '#wpacu-area-option-give-access-specific-non-admin-users .chosen-search .chosen-search-input';
+
+                    setTimeout(function() {
+                        $(wpacuAccessViaSpecificUserSearchInput).autocomplete({
+                            source: function (request, response) {
+                                $('#wpacu-access-via-specific-user-searching-notice').removeClass('wpacu_hide');
+
+                                $.ajax({
+                                    method: 'post',
+                                    url: wpacu_object.ajax_url,
+                                    data: {
+                                        action:         wpacu_object.plugin_prefix + '_search_non_admin_users_for_dd',
+                                        wpacu_query:    request.term,
+                                        wpacu_security: wpacu_object.wpacu_search_non_admin_users_for_dd_nonce,
+                                        wpacu_time_r:   new Date().getTime()
+                                    },
+                                    cache: false,
+                                    success: function (response) {
+                                        $(nonAdminUsersDdSearchTarget).empty();
+                                        $(nonAdminUsersDdSearchTarget).append('<option value=""></option>');
+
+                                        $(nonAdminUsersDdSearchTarget).append(response);
+
+                                        var chosenInputValue = $(wpacuAccessViaSpecificUserSearchInput).val();
+
+                                        $(nonAdminUsersDdSearchTarget).trigger('liszt:updated').trigger('chosen:updated');
+
+                                        $(wpacuAccessViaSpecificUserSearchInput).val(chosenInputValue);
+
+                                        $('#wpacu-access-via-specific-user-searching-notice').addClass('wpacu_hide');
+                                    }
+                                });
+                            }
+                        });
+                    }, 1000);
+                }
+                // [END] Auto-complete user search drop-down (for plugin access)
             },
 
             tabOpenSettingsArea: function(evt, settingName) {
@@ -1141,7 +1370,50 @@ jQuery(document).ready(function($) {
                 $('a[href="#'+ settingName +'"]').addClass('active');
                 $('#wpacu-selected-tab-area').val(settingName);
 
+                $.fn.wpAssetCleanUpSettingsArea().updateUriParamWithTabArea(settingName);
+
+                // Any sub-tabs within the tab area?
+                let $anyFirstSubTabInput = $('#' + settingName).find('.wpacu-sub-tabs-wrap .wpacu-nav-input:first-child');
+
+                if ($anyFirstSubTabInput.length > 0) {
+                    $('#' + $anyFirstSubTabInput.attr('id')).prop('checked', true);
+                    $('#' + $anyFirstSubTabInput.attr('id') + '-area').addClass('wpacu-visible');
+                    $.fn.wpAssetCleanUpSettingsArea().updateUriParamWithSubTabArea($anyFirstSubTabInput.val());
+                } else {
+                    $.fn.wpAssetCleanUpSettingsArea().updateUriParamWithSubTabArea('');
+                }
+
                 },
+
+            updateUriParamWithTabArea: function(selectedTabArea) {
+                // Construct URLSearchParams object instance from current URL querystring.
+                var queryParams = new URLSearchParams(window.location.search);
+
+                // Set new or modify existing parameter value.
+                queryParams.set('wpacu_selected_tab_area', selectedTabArea);
+
+                // Replace current querystring with the new one.
+                history.replaceState(null, null, '?' + queryParams.toString());
+            },
+
+            updateUriParamWithSubTabArea: function(selectedSubTabArea) {
+                // Construct URLSearchParams object instance from current URL querystring.
+                var queryParams = new URLSearchParams(window.location.search);
+
+                if (selectedSubTabArea !== '') {
+                    // Set new or modify existing parameter value.
+                    queryParams.set('wpacu_selected_sub_tab_area', selectedSubTabArea);
+                } else {
+                    // Remove existing parameter value.
+                    queryParams.delete('wpacu_selected_sub_tab_area');
+                }
+
+                // Replace current querystring with the new one.
+                history.replaceState(null, null, '?' + queryParams.toString());
+
+                // Old reference fallback | $_REQUEST is used to get the value in case the URI param fails to update
+                $('#wpacu-selected-sub-tab-area').val(selectedSubTabArea);
+            }
         }
     }
     $.fn.wpAssetCleanUpSettingsArea().actions();
@@ -1232,15 +1504,6 @@ jQuery(document).ready(function($) {
      */
     $.fn.wpAssetCleanUpFrontendCssJsManagerArea = function() {
         return {
-            getParameterByName: function(name, url = window.location.href) {
-                // Source: https://stackoverflow.com/questions/901115/how-can-i-get-query-string-values-in-javascript
-                name = name.replace(/[\[\]]/g, '\\$&');
-                var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
-                    results = regex.exec(url);
-                if (!results) return null;
-                if (!results[2]) return '';
-                return decodeURIComponent(results[2].replace(/\+/g, ' '));
-            },
             actions: function () {
                 // "Update" button is clicked within front-end view
                 let $updateBtnFrontEnd = $('#wpacu-update-front-settings-area .wpacu_update_btn');
@@ -1267,7 +1530,7 @@ jQuery(document).ready(function($) {
                     dataFetchHardcodedList[wpacu_object.plugin_prefix + '_time_r'] = new Date().getTime();
                     dataFetchHardcodedList['wpacu_just_hardcoded']                 = 1;
 
-                    if ($.fn.wpAssetCleanUpFrontendCssJsManagerArea().getParameterByName('wpacu_ignore_no_load_option') !== null) {
+                    if ($.fn.wpAssetCleanUp().getParameterByName('wpacu_ignore_no_load_option') !== null) {
                         dataFetchHardcodedList['wpacu_ignore_no_load_option']      = 1;
                     }
 
@@ -1301,7 +1564,9 @@ jQuery(document).ready(function($) {
             actions: function () {
                 // Option #1: Fetch the assets automatically and show the list (Default) is chosen
                 // Or "Homepage" from "CSS & JavaScript Load Manager" is loaded
-                if (wpacu_object.list_show_status === 'default' || wpacu_object.list_show_status === '' || wpacu_object.override_assets_list_load) {
+                if (wpacu_object.list_show_status === 'default' ||
+                    wpacu_object.list_show_status === '' ||
+                    (typeof wpacu_object.override_assets_list_load !== 'undefined' && wpacu_object.override_assets_list_load)) {
                     $.fn.wpAssetCleanUp().wpacuAjaxGetAssetsArea(false);
                 }
 
@@ -1319,8 +1584,20 @@ jQuery(document).ready(function($) {
                 // Better compatibility with WordPress 5.0 as edit post/page is not refreshed after update
                 // Asset CleanUp meta box's content is refreshed to show the latest changes as if the page was refreshed
                 // This takes effect only when edit post/page is used and Gutenberg editor is used - e.g. /wp-admin/post.php?post=[post_id_here]&action=edit
-                $(document).on('click', '.wp-admin.post-php .edit-post-header__settings button.is-primary', function () {
+                $(document).on('click',
+                    '.wp-admin.post-php .editor-header__settings button.is-primary, ' +
+                    '.wp-admin.post-php .edit-post-header__settings button.is-primary',
+                    function () {
                     let $thisUpdateBtn = $(this);
+
+                    let parentClassElementIdentifier = '.editor-header__settings';
+                    let isSavingIdentifier = '.is-busy';
+
+                    // Fallback (old WordPress version)
+                    if ($thisUpdateBtn.parent().hasClass('edit-post-header__settings')) {
+                        parentClassElementIdentifier = '.edit-post-header__settings';
+                        isSavingIdentifier = '.is-saving';
+                    }
 
                     // Wait until triggering it around half a second after the "Update" button is clicked
                     setTimeout(function() {
@@ -1338,13 +1615,16 @@ jQuery(document).ready(function($) {
 
                             // Updating status is over. Reload the CSS/JS manager which would show the new list
                             // (e.g. a site-wide rule could be applied, and it needs to show the removing "radio input" option)
-                            if ($('.edit-post-header__settings .is-saving').length === 0) {
+                            if ($(parentClassElementIdentifier + ' ' + isSavingIdentifier).length === 0) {
                                 let wpacuMetaBoxContentTarget = '#wpacu_meta_box_content';
 
                                 if ($(wpacuMetaBoxContentTarget).length > 0) {
-                                    $('#wpacu-assets-reloading').remove();
-                                    let wpacuAppendToPostWhileUpdating = '<span id="wpacu-assets-reloading" class="editor-post-saved-state is-wpacu-reloading">' + wpacu_object.reload_icon + wpacu_object.reload_msg + '</span>';
-                                    $('.wp-admin.post-php .edit-post-header__settings').prepend(wpacuAppendToPostWhileUpdating);
+                                    if ($('#wpacu-assets-reloading-in-edit-post-area').length === 0) {
+                                        let wpacuAppendToPostWhileUpdating = '<span id="wpacu-assets-reloading-in-edit-post-area">' + wpacu_object.reload_icon + '&nbsp;<strong>' + wpacu_object.reload_msg + '</strong></span>';
+                                        $('.wp-admin.post-php ' + parentClassElementIdentifier).prepend(wpacuAppendToPostWhileUpdating);
+                                    }
+
+                                    //console.log('.wp-admin.post-php ' + parentClassElementIdentifier);
 
                                     $('.wpacu_asset_row, .wpacu-page-options .wpacu-assets-collapsible-content').addClass('wpacu_loading'); // show loading spinner once "Update" is clicked
 
@@ -1408,14 +1688,34 @@ jQuery(document).ready(function($) {
     * [END] Common CSS/JS Manager (Dashboard & Front-end)
     */
 
+    const wpacuSpinnerElId   = '#wpacu-main-loading-spinner';
+    const wpacuSpinnerTextEl = '#wpacu-main-loading-spinner-text';
+
     $.fn.wpAssetCleanUpClearCache = function() {
         return {
             init: function() {
+                // Clear cache if "clear_cache" is set in the "wpacu_object"
+                // e.g. after a WP theme is changed
+                if (typeof wpacu_object.clear_cache_via_ajax !== 'undefined' && wpacu_object.clear_cache_via_ajax) {
+                    $.fn.wpAssetCleanUpClearCache().wpacuAjaxClearCache(true);
+                }
+
+                $(document).on('click', '.wpacu-clear-cache-link', function(e) {
+                    e.preventDefault();
+
+                    if ($(wpacuSpinnerElId).length > 0) {
+                        $(wpacuSpinnerTextEl).html( $('div[data-wpacu-clear-cache-text="1"]').html() );
+                        $(wpacuSpinnerElId).removeClass('wpacu_hide');
+                    }
+
+                    $.fn.wpAssetCleanUpClearCache().wpacuAjaxClearCache(true);
+                });
+
                 // Do not trigger other plugins' cache again if already cleared (save resources)
                 let triggeredClearCacheIncludingOtherPluginsClearing = false;
 
                 // The assets of a page just had rules applied (e.g. assets were unloaded)
-                if (wpacu_object.clear_cache_on_page_load !== '') {
+                if (wpacu_object.clear_cache_via_ajax !== '') {
                     $.fn.wpAssetCleanUpClearCache().wpacuAjaxClearCache();
                     triggeredClearCacheIncludingOtherPluginsClearing = true;
                 }
@@ -1451,18 +1751,22 @@ jQuery(document).ready(function($) {
                 }
             },
 
-            wpacuAjaxClearCache: function() {
-                /**
-                 * Called after a post/page is saved (WordPress AJAX call)
-                 */
-                if (typeof wpacu_object.wpacu_ajax_preload_url_nonce === 'undefined') {
-                    return;
-                }
+            wpacuAjaxClearCache: function(forceCacheClear = false) {
+                // Do these verifications if the default value is used which is for triggering the cache in certain situations
+                // If it's set to "true" then it's the obvious intention of the user to clear the cache such as clicking the link from the top admin bar
+                if (forceCacheClear === false) {
+                    /**
+                     * Called after a post/page is saved (WordPress AJAX call)
+                     */
+                    if (typeof wpacu_object.wpacu_ajax_preload_url_nonce === 'undefined') {
+                        return;
+                    }
 
-                // Is the post status a "draft" one? Do not do any cache clearing and preloading as it's useless
-                let $wpacuHiddenPostStatusEl = '#hidden_post_status';
-                if ($($wpacuHiddenPostStatusEl).length > 0 && $($wpacuHiddenPostStatusEl).val() === 'draft') {
-                    return;
+                    // Is the post status a "draft" one? Do not do any cache clearing and preloading as it's useless
+                    let $wpacuHiddenPostStatusEl = '#hidden_post_status';
+                    if ($($wpacuHiddenPostStatusEl).length > 0 && $($wpacuHiddenPostStatusEl).val() === 'draft') {
+                        return;
+                    }
                 }
 
                 $.get(wpacu_object.ajax_url, {
@@ -1474,7 +1778,7 @@ jQuery(document).ready(function($) {
                         $.fn.wpAssetCleanUpClearCache().wpacuClearAutoptimizeCache(); // Autoptimize (if active)
                         // "Cache Enabler" (if active) cache was already cleared in classes/Update::ajaxClearCache() during the AJAX call
 
-                        if (wpacu_object.is_frontend_view) {
+                        if ( typeof wpacu_object.is_frontend_view !== 'undefined' && wpacu_object.is_frontend_view ) {
                             // Preload (for the guest)
                             // The preload for the admin is not needed as the user is managing the CSS/JS in the front-end view and the page has been already visited
                             $.post(wpacu_object.ajax_url, {
@@ -1482,6 +1786,11 @@ jQuery(document).ready(function($) {
                                 'page_url':     wpacu_object.page_url,
                                 'wpacu_nonce':  wpacu_object.wpacu_ajax_preload_url_nonce,
                                 'time_r':       new Date().getTime()
+                            }, function() {
+                                if ($(wpacuSpinnerElId).length > 0) {
+                                    // As the caching has been cleared, hide the notice from the screen
+                                    $(wpacuSpinnerElId).addClass('wpacu_hide');
+                                }
                             });
                         } else {
                             // Preload (for the admin)
@@ -1496,10 +1805,19 @@ jQuery(document).ready(function($) {
                                     'page_url':     wpacu_object.page_url,
                                     'wpacu_nonce':  wpacu_object.wpacu_ajax_preload_url_nonce,
                                     'time_r':       new Date().getTime()
+                                }, function() {
+                                    if ($(wpacuSpinnerElId).length > 0) {
+                                        // As the caching has been cleared, hide the notice from the screen
+                                        $(wpacuSpinnerElId).addClass('wpacu_hide');
+                                    }
                                 });
                             });
                         }
                     }, 150);
+                }).always(function() {
+                    if ($('#wpacu-assets-reloading-in-edit-post-area').length > 0) {
+                        $('#wpacu-assets-reloading-in-edit-post-area').remove();
+                    }
                 });
             },
             wpacuClearAutoptimizeCache: function() {
@@ -1589,6 +1907,48 @@ jQuery(document).ready(function($) {
         $.fn.wpAssetCleanUp().wpacuCheckSourcesFor404Errors();
     });
 })(jQuery);
+
+/*
+* [START INFO MODAL BOX]
+*/
+document.addEventListener("DOMContentLoaded", () => {
+    function wpacuShowHideInfoModal(targetedModalId) {
+        // Show the modal
+        document.getElementById(targetedModalId).style.display = 'block';
+
+        // Clicking outside the modal area (close it)
+        document.getElementById(targetedModalId).addEventListener('click', function(event) {
+            if (event.target.id === targetedModalId) {
+                document.getElementById(targetedModalId).style.display = 'none';
+            }
+        });
+    }
+
+    document.body.addEventListener('click', function (event) {
+        // "a" tag is clicked with "data-wpacu-modal-target" attribute
+        if  ( event.target.tagName.toLowerCase() === 'a' ) {
+            if ( event.target.getAttribute('data-wpacu-modal-target') && event.target.getAttribute('data-wpacu-modal-target').startsWith('wpacu-') ) {
+                let wpacuLinkRef = event.target.getAttribute('data-wpacu-modal-target');
+                let wpacuPossibleModalId = wpacuLinkRef.replace('-target', '');
+
+                if (document.getElementById(wpacuPossibleModalId)) {
+                    wpacuShowHideInfoModal(wpacuPossibleModalId);
+                    event.preventDefault();
+                }
+            }
+        }
+
+        // "x" is clicked within the modal box
+        if ( event.target.tagName.toLowerCase() === 'span' && event.target.classList.contains('wpacu-close') ) {
+            event.target.parentNode.parentNode.style.display = 'none';
+            event.preventDefault();
+        }
+    });
+});
+/*
+* [END INFO MODAL BOX]
+*/
+
 //
 // [END] Core file
 //

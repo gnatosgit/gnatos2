@@ -27,14 +27,27 @@ function google_business_reviews_rating(e, i) {
 		jQuery('.review-more-link:eq(0)', '.google-business-reviews-rating:eq(' + e + ') li:eq(' + i + ')').remove();
 		return;
 	}
+
+	const observer = new IntersectionObserver(stars => {
+			stars.forEach(item => {
+				if (item.isIntersecting) {
+					item.target.classList.add('animation-start');
+					return;
+				}
+
+				item.target.classList.remove('animation-pause');
+				return;
+			});
+		}, { threshold: 0.5 }),
+		safari = (navigator.userAgent.match(/^((?!chrome|android).)*safari/i) != null);
 	
 	var stars_width_multiplier = null,
 		rating = null,
 		rating_width = null,
-		safari = (navigator.userAgent.match(/^((?!chrome|android).)*safari/i) != null),
 		clear_styles = (jQuery('#stylesheet-none').length && jQuery('#stylesheet-none').is(':checked')),
 		star_html = false,
 		star_css = false,
+		star_inline = false,
 		star_image = null,
 		overall_link = null,
 		reviews_window = null,
@@ -45,6 +58,7 @@ function google_business_reviews_rating(e, i) {
 			view = (jQuery(this).hasClass('carousel') && typeof jQuery(this).data('view') == 'number' && jQuery(this).data('view') >= 1 && jQuery(this ).data('view') <= 50) ? jQuery(this).data('view') : null,
 			star_html = (typeof jQuery(this).attr('class') == 'string' && (jQuery(this).hasClass('stars-html') || jQuery(this).attr('class').match(/\bversion[_-]?1\b/i))),
 			star_css = (!star_html && typeof jQuery(this).attr('class') == 'string' && (jQuery(this).hasClass('stars-css') || jQuery(this).hasClass('stars-gray-css'))),
+			star_inline = (!star_html && !star_css && typeof jQuery(e).data('stars') == 'string' && jQuery(e).data('stars').match(/^inline|inline$/i) != null),
 			stars_width_multiplier = 0.196,
 			rating = (jQuery('.number', this).length) ? parseFloat(jQuery('.number:eq(0)', this).text().replace(/,/g, '.').replace(/(\d+(?:\.\d+)?)/, '$1')) : null,
 			overall_link = (typeof jQuery(this).data('href') == 'string' && jQuery(this).data('href').length && !jQuery('.buttons', this).length && (!jQuery('.listing', this).length || jQuery('.listing', this).length && !jQuery('.listing > *', this).length)) ? jQuery(this).data('href') : null;
@@ -83,7 +97,11 @@ function google_business_reviews_rating(e, i) {
 			
 			jQuery(this).removeData('href').removeAttr('data-href');
 		}
-		
+
+		if (this.querySelector(':scope .all-stars.animate') != null) {
+			observer.observe(this.querySelector(':scope .all-stars.animate'));
+		}
+
 		if (!star_html && jQuery('.star', jQuery('.all-stars', e)).length) {
 			if (star_css) {
 				if (!jQuery('.rating-stars', e).length) {
@@ -94,7 +112,7 @@ function google_business_reviews_rating(e, i) {
 					jQuery('.all-stars', e).append('<span class="star gray temporary" style="display: none;">.</span>');
 				}
 				
-				if (typeof jQuery('.star.gray', e).css('color') == 'string' && !jQuery('.rating-stars', e).css('color').match(/^(?:#(?:F7B603|E7711B)|rgba?\s*\(23[12],\s*11[34],\s*2[78](?:,\s*1(?:\.0+)?)?\))$/i)) {
+				if (typeof jQuery('.star.gray', e).css('color') == 'string' && !jQuery('.rating-stars', e).css('color').match(/^(?:#(?:F7B\d0\d|E7711B)|rgba?\s*\(23[12],\s*11[34],\s*2[78](?:,\s*1(?:\.0+)?)?\))$/i)) {
 					jQuery(e).data('stars', jQuery('.rating-stars', e).css('color'));
 				}
 				
@@ -107,7 +125,7 @@ function google_business_reviews_rating(e, i) {
 				}
 			}
 
-			if (typeof jQuery(e).data('stars') == 'string' && jQuery(e).data('stars').length && !jQuery(e).data('stars').match(/^#(?:F7B603|E7711B)$/i) || typeof jQuery(e).data('stars-gray') == 'string' && jQuery(e).data('stars-gray').length && !jQuery(e).data('stars-gray').match(/^#(?:A4A4A4|C1C1C1|C9C9C9)$/i)) {
+			if (!star_inline && (typeof jQuery(e).data('stars') == 'string' && jQuery(e).data('stars').length && !jQuery(e).data('stars').match(/^#(?:F7B\d0\d|E7711B)$/i) || typeof jQuery(e).data('stars-gray') == 'string' && jQuery(e).data('stars-gray').length && !jQuery(e).data('stars-gray').match(/^#(?:A4A4A4|C1C1C1|C9C9C9)$/i))) {
 				if (star_css && (typeof jQuery(e).data('stars-gray') != 'string' || typeof jQuery(e).data('stars-gray') == 'string' && jQuery(e).data('stars-gray') == 'css') && !jQuery('.star.gray', jQuery('.all-stars', e)).length) {
 					jQuery('.all-stars', e).append('<span class="temporary" style="display: none;">.</span>');
 				}
@@ -116,8 +134,8 @@ function google_business_reviews_rating(e, i) {
 					try {
 						star_image = atob(jQuery(this).css('background-image').replace(/^url\(["']data:image\/svg\+xml;charset=UTF-8;base64,(.+)["']\)$/, '$1'));
 						
-						if (typeof jQuery(e).data('stars') == 'string' && !jQuery(e).data('stars-gray').match(/^#(?:F7B603|E7711B)$/i)) {
-							star_image = star_image.replace(/#(?:F7B603|E7711B)/g, jQuery(e).data('stars'));
+						if (typeof jQuery(e).data('stars') == 'string' && !jQuery(e).data('stars-gray').match(/^#(?:F7B\d0\d|E7711B)$/i)) {
+							star_image = star_image.replace(/#(?:F7B\d0\d|E7711B)/g, jQuery(e).data('stars'));
 						}
 	
 						if (typeof jQuery(e).data('stars-gray') == 'string' && jQuery(e).data('stars-gray').length && !jQuery(e).data('stars-gray').match(/^#(?:A4A4A4|C1C1C1|C9C9C9)$/i)) {
@@ -180,7 +198,7 @@ function google_business_reviews_rating(e, i) {
             });
 		}
 		
-		if (!star_html && jQuery('.all-stars', e).length && jQuery('.all-stars', e).hasClass('animate') && typeof rating == 'number' && rating > 1.5 && jQuery('.number:eq(0)', e).length) {
+		if (!star_html && !star_inline && jQuery('.all-stars', e).length && jQuery('.all-stars', e).hasClass('animate') && typeof rating == 'number' && rating > 1.5 && jQuery('.number:eq(0)', e).length) {
 			jQuery('.all-stars', e)
 				.after(jQuery('<span>')
 					.addClass('all-stars')
@@ -215,11 +233,11 @@ function google_business_reviews_rating(e, i) {
 			});
 			
 			setTimeout(
-				function() {
+				function(e) {
 					if (jQuery('.all-stars.backdrop', e).length) {
 						jQuery('.all-stars.backdrop', e).fadeOut(300, function() { jQuery(this).remove(); });
 					}
-				}, 4800);
+				}, 4800, jQuery('.all-stars.backdrop', e).length);
 		}
 		else if (star_html && typeof rating == 'number') {
 			if (safari) {
