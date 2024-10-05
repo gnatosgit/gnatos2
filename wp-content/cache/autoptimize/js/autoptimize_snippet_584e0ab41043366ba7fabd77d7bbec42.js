@@ -1,19 +1,19 @@
 /*! Swipebox v1.4.4 | Constantin Saguin csag.co | MIT License | github.com/brutaldesign/swipebox */
 (function(window,document,$,undefined){$.swipebox=function(elem,options){var ui,defaults={useCSS:true,useSVG:true,initialIndexOnArray:0,removeBarsOnMobile:true,hideCloseButtonOnMobile:false,hideBarsDelay:3000,videoMaxWidth:1140,vimeoColor:"cccccc",beforeOpen:null,afterOpen:null,afterClose:null,afterMedia:null,nextSlide:null,prevSlide:null,loopAtEnd:false,autoplayVideos:false,queryStringData:{},toggleClassOnLoad:"",selector:null,},plugin=this,elements=[],$elem,isMobile=navigator.userAgent.match(/(iPad)|(iPhone)|(iPod)|(Android)|(PlayBook)|(BB10)|(BlackBerry)|(Opera Mini)|(IEMobile)|(webOS)|(MeeGo)/i),isTouch=isMobile!==null||document.createTouch!==undefined||"ontouchstart"in window||"onmsgesturechange"in window||navigator.msMaxTouchPoints,supportSVG=!!document.createElementNS&&!!document.createElementNS("http://www.w3.org/2000/svg","svg").createSVGRect,winWidth=window.innerWidth?window.innerWidth:$(window).width(),winHeight=window.innerHeight?window.innerHeight:$(window).height(),currentX=0,html='<div id="swipebox-overlay">\
-     <div id="swipebox-container">\
-      <div id="swipebox-slider"></div>\
-      <div id="swipebox-top-bar">\
-       <div id="swipebox-title"></div>\
-      </div>\
-      <div id="swipebox-bottom-bar">\
-       <div id="swipebox-arrows">\
-        <a id="swipebox-prev"></a>\
-        <a id="swipebox-next"></a>\
-       </div>\
-      </div>\
-      <a id="swipebox-close"></a>\
-     </div>\
-   </div>';plugin.settings={};$.swipebox.close=function(){ui.closeSlide();};$.swipebox.extend=function(){return ui;};plugin.init=function(){plugin.settings=$.extend({},defaults,options);if($.isArray(elem)){elements=elem;ui.target=$(window);ui.init(plugin.settings.initialIndexOnArray);}else{$(elem).on("click",plugin.settings.selector,function(event){if(event.target.parentNode.className==="slide current"){return false;}
+					<div id="swipebox-container">\
+						<div id="swipebox-slider"></div>\
+						<div id="swipebox-top-bar">\
+							<div id="swipebox-title"></div>\
+						</div>\
+						<div id="swipebox-bottom-bar">\
+							<div id="swipebox-arrows">\
+								<a id="swipebox-prev"></a>\
+								<a id="swipebox-next"></a>\
+							</div>\
+						</div>\
+						<a id="swipebox-close"></a>\
+					</div>\
+			</div>';plugin.settings={};$.swipebox.close=function(){ui.closeSlide();};$.swipebox.extend=function(){return ui;};plugin.init=function(){plugin.settings=$.extend({},defaults,options);if($.isArray(elem)){elements=elem;ui.target=$(window);ui.init(plugin.settings.initialIndexOnArray);}else{$(elem).on("click",plugin.settings.selector,function(event){if(event.target.parentNode.className==="slide current"){return false;}
 ui.destroy();if(plugin.settings.selector===null){$elem=$(elem);}else{$elem=$(elem).find(plugin.settings.selector);}
 elements=[];var index,relType,relVal;if(!relVal){relType="data-rel";relVal=$(this).attr(relType);}
 if(!relVal){relType="rel";relVal=$(this).attr(relType);}
