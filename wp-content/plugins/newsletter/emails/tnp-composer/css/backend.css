@@ -1,5 +1,10 @@
 /* Contains some rules to simulate device layout on backend preview */
 
+#tnpb-content.tnp-view-mobile {
+    padding-left: var(--body_padding_left);
+    padding-right: var(--body_padding_right);
+}
+
 #tnpb-content.tnp-view-mobile table[class="responsive"],
 #tnpb-content.tnp-view-mobile table.responsive
 {
@@ -19,6 +24,10 @@
     float: none;
 }
 
+#tnpb-content.tnp-view-mobile .fs-90 {
+    font-size: 90% !important;
+}
+
 #tnpb-content.tnp-view-mobile img[class="responsive"],
 #tnpb-content.tnp-view-mobile img.responsive
 {
@@ -28,6 +37,10 @@
 #tnpb-content.tnp-view-mobile img[class="fluid"]{
     width: 100%;
     max-width: 100%!important;
+}
+
+#tnpb-content.tnp-view-mobile .p-0 {
+    padding: 0 !important;
 }
 
 #tnpb-content.tnp-view-mobile .pt-1 {
