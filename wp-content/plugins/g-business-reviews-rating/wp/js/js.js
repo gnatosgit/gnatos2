@@ -59,6 +59,7 @@ function google_business_reviews_rating(e, i) {
 			star_html = (typeof jQuery(this).attr('class') == 'string' && (jQuery(this).hasClass('stars-html') || jQuery(this).attr('class').match(/\bversion[_-]?1\b/i))),
 			star_css = (!star_html && typeof jQuery(this).attr('class') == 'string' && (jQuery(this).hasClass('stars-css') || jQuery(this).hasClass('stars-gray-css'))),
 			star_inline = (!star_html && !star_css && typeof jQuery(e).data('stars') == 'string' && jQuery(e).data('stars').match(/^inline|inline$/i) != null),
+			star_color = (!star_html && !star_css && !star_inline && (typeof jQuery(e).data('stars') == 'string' || typeof jQuery(e).data('stars-gray') == 'string')),
 			stars_width_multiplier = 0.196,
 			rating = (jQuery('.number', this).length) ? parseFloat(jQuery('.number:eq(0)', this).text().replace(/,/g, '.').replace(/(\d+(?:\.\d+)?)/, '$1')) : null,
 			overall_link = (typeof jQuery(this).data('href') == 'string' && jQuery(this).data('href').length && !jQuery('.buttons', this).length && (!jQuery('.listing', this).length || jQuery('.listing', this).length && !jQuery('.listing > *', this).length)) ? jQuery(this).data('href') : null;
@@ -117,18 +118,20 @@ function google_business_reviews_rating(e, i) {
 				
 				if (typeof jQuery('.star.gray', e).css('color') == 'string' && !jQuery('.rating-stars', e).css('color').match(/^(?:#(?:F7B\d0\d|E7711B)|rgba?\s*\(23[12],\s*11[34],\s*2[78](?:,\s*1(?:\.0+)?)?\))$/i)) {
 					jQuery(e).data('stars', jQuery('.rating-stars', e).css('color'));
+					star_color = true;
 				}
 				
 				if (typeof jQuery('.star.gray', e).css('color') == 'string' && (!jQuery(e).hasClass('dark') && !jQuery('.star.gray', e).css('color').match(/^(?:#(?:A4A4A4|C1C1C1|C9C9C9)|rgba?\s*\(193,\s*193,\s*193(?:,\s*1(?:\.0+)?)?\))$/i) || jQuery(e).hasClass('dark') && !jQuery('.star.gray', e).css('color').match(/^(?:#B4B4B4|rgba?\s*\(180,\s*180,\s*180(?:,\s*0?\.8)?\))$/i))) {
 					jQuery(e).data('stars-gray', jQuery('.star.gray', e).css('color'));
+					star_color = true;
 				}
 				
 				if (jQuery('.temporary', jQuery('.all-stars', e)).length) {
 					jQuery('.temporary', jQuery('.all-stars', e)).remove();
 				}
 			}
-
-			if (!star_inline && (typeof jQuery(e).data('stars') == 'string' && jQuery(e).data('stars').length && !jQuery(e).data('stars').match(/^#(?:F7B\d0\d|E7711B)$/i) || typeof jQuery(e).data('stars-gray') == 'string' && jQuery(e).data('stars-gray').length && !jQuery(e).data('stars-gray').match(/^#(?:A4A4A4|C1C1C1|C9C9C9)$/i))) {
+			
+			if (star_color && (typeof jQuery(e).data('stars') == 'string' && jQuery(e).data('stars').length && !jQuery(e).data('stars').match(/^#(?:F7B\d0\d|E7711B)$/i) || typeof jQuery(e).data('stars-gray') == 'string' && jQuery(e).data('stars-gray').length && !jQuery(e).data('stars-gray').match(/^#(?:A4A4A4|C1C1C1|C9C9C9)$/i))) {
 				if (star_css && (typeof jQuery(e).data('stars-gray') != 'string' || typeof jQuery(e).data('stars-gray') == 'string' && jQuery(e).data('stars-gray') == 'css') && !jQuery('.star.gray', jQuery('.all-stars', e)).length) {
 					jQuery('.all-stars', e).append('<span class="temporary" style="display: none;">.</span>');
 				}
@@ -137,7 +140,7 @@ function google_business_reviews_rating(e, i) {
 					try {
 						star_image = atob(jQuery(this).css('background-image').replace(/^url\(["']data:image\/svg\+xml;charset=UTF-8;base64,(.+)["']\)$/, '$1'));
 						
-						if (typeof jQuery(e).data('stars') == 'string' && !jQuery(e).data('stars-gray').match(/^#(?:F7B\d0\d|E7711B)$/i)) {
+						if (typeof jQuery(e).data('stars') == 'string' && jQuery(e).data('stars').length && !jQuery(e).data('stars').match(/^#(?:F7B\d0\d|E7711B)$/i)) {
 							star_image = star_image.replace(/#(?:F7B\d0\d|E7711B)/g, jQuery(e).data('stars'));
 						}
 	

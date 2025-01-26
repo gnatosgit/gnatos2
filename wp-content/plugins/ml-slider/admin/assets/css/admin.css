@@ -1695,9 +1695,12 @@ td .dot.available {
     background-size: contain;
 }
 
-.static-theme-customize {
+.metaslider .static-theme-customize {
 
     table {
+        border-right: 1px solid #c3c4c7;
+        border-left: 1px solid #c3c4c7;
+        border-bottom: 1px solid #c3c4c7;
         margin-top: 20px !important;
         margin-bottom: 0 !important;
         width: 100%;
@@ -1705,14 +1708,60 @@ td .dot.available {
         tr {
             border: none !important;
 
+            &.spacer-top,
+            &.spacer-bottom {
+                
+                td {
+                    background: #fff !important;
+                    border: none !important;
+                    padding: 5px !important;
+                }
+            }
+
+            &.row-header {
+                    
+                + tr td {
+                    padding-top: 12px;
+                }
+            }
+
             td {
+                padding-left: 10px;
+                padding-right: 10px;
+                padding-bottom: 5px;
+                padding-top: 5px;
+
+                .wp-picker-container .wp-color-result.button {
+                    margin-bottom: 0;
+                }
+
+                &[colspan="2"] {
+                    border-top: 1px solid #c3c4c7;
+                    border-bottom: 1px solid #c3c4c7;
+                    background: #f1f1f1;
+                    padding-top: 10px;
+                    padding-bottom: 10px;
+
+                    h4 {
+                        font-weight: 500;
+                        color: #50575e;
+                        font-size: 0.9rem;
+                    }
+                }
 
                 &:first-child {
-                    padding-left: 0;
+                    /*padding-left: 0;*/
                 }
 
                 &:last-child {
-                    padding-right: 0;
+                    /*padding-right: 0;*/
+                }
+
+                .ms-range-dual {
+
+                    input {
+                        margin-bottom: 6px;
+                    }
                 }
             }
         }
@@ -1824,8 +1873,9 @@ td .dot.available {
     border-left: 4px solid transparent;
 }
 
-/* Theme customizer Pause / Play Options */
-.metaslider .ms-settings-table tr.customizer-pausePlay {
+/* Theme customizer Pause / Play Options and Progress Bar */
+.metaslider .ms-settings-table tr.customizer-pausePlay,
+.metaslider .ms-settings-table tr.customizer-progressBar {
 	display: none;
 }
 

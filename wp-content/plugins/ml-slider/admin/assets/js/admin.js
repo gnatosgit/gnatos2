@@ -484,12 +484,12 @@ window.jQuery(function ($) {
         var autoPlay = $('.ms-settings-table input[name="settings[autoPlay]"]');
         if (autoPlay.is(':checked')) {
             if (pausePlay.is(':checked')) {
-                $('tr.customizer-pausePlay').show();
+                $('tr.customizer-play_pause').show();
             } else {
-                $('tr.customizer-pausePlay').hide();
+                $('tr.customizer-play_pause').hide();
             }
         } else {
-            $('tr.customizer-pausePlay').hide(); 
+            $('tr.customizer-play_pause').hide(); 
         }   
     }
 
@@ -514,9 +514,9 @@ window.jQuery(function ($) {
     var showHideCustomArrowColor = function () {
         var links = $('.ms-settings-table select[name="settings[links]"]').val();
         if (links === 'false') {
-            $('tr.customizer-links').hide();
+            $('tr.customizer-arrows').hide();
         } else {
-            $('tr.customizer-links').show();
+            $('tr.customizer-arrows').show();
         }
     }
 
@@ -606,6 +606,30 @@ window.jQuery(function ($) {
         }
     }
     adjustLoop();
+
+    /**
+     * When Progress Bar changes
+     * 
+     * @since 3.94
+     */
+    $('.metaslider').on('change', '.ms-settings-table input[name="settings[progressBar]"], .ms-settings-table input[name="settings[infiniteLoop]"]', function () {
+        showHideCustomProgressBarColor();
+    });
+
+    /**
+     * Show/hide custom color settings for progress bar
+     * 
+     * @since 3.92
+     */
+    var showHideCustomProgressBarColor = function () {
+        var progressBar = $('.ms-settings-table input[name="settings[progressBar]"]');
+        var infiniteLoop = $('.ms-settings-table input[name="settings[infiniteLoop]"]');
+        $('tr.customizer-progressBar').toggle(!infiniteLoop.is(':checked') && progressBar.is(':checked'));   
+    }
+    setTimeout(function () {
+        showHideCustomProgressBarColor();
+    }, 100);
+    
 
     /**
      * Add all the image APIs. Add events everytime the modal is open
