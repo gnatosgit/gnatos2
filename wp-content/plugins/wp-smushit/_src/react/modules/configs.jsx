@@ -2,7 +2,7 @@
  * External dependencies
  */
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 
 /**
  * WordPress dependencies
@@ -49,6 +49,7 @@ export const Configs = ({ isWidget }) => {
 			'Use configs to save preset configurations of Smush’s settings, then upload and apply them to your other sites in just a few clicks!',
 			'wp-smushit'
 		),
+		freeNoticeMessage: __( 'Tired of saving, downloading and uploading your configs across your sites? WPMU DEV members use The Hub to easily apply configs to multiple sites at once… Try it today!', 'wp-smushit' ),
 		proDescription,
 		syncWithHubText: __(
 			'Created or updated configs via the Hub?',
@@ -144,9 +145,10 @@ export const Configs = ({ isWidget }) => {
 		settingsLabels: {
 			bulk_smush: __('Bulk Smush', 'wp-smushit'),
 			integrations: __('Integrations', 'wp-smushit'),
-			lazy_load: __('Lazy Load', 'wp-smushit'),
+			// Settings::LAZY_PRELOAD_MODULE_NAME.
+			lazy_load: __('Lazy Load & Preload', 'wp-smushit'),
 			cdn: __('CDN', 'wp-smushit'),
-			webp_mod: __('Local WebP', 'wp-smushit'),
+			next_gen: __('Next-Gen Formats', 'wp-smushit'),
 			settings: __('Settings', 'wp-smushit'),
 			networkwide: __('Subsite Controls', 'wp-smushit'),
 		},
@@ -164,9 +166,10 @@ export const Configs = ({ isWidget }) => {
 				'PNG to JPEG Conversion',
 				'Email Notification',
 				'CDN',
-				'Local WebP',
+				'Next-Gen Formats',
 				'Amazon S3',
 				'NextGen Gallery',
+				'Preload Critical Images',
 			] }
 		/>
 	);
@@ -175,10 +178,10 @@ export const Configs = ({ isWidget }) => {
 domReady(function () {
 	const configsPageBox = document.getElementById('smush-box-configs');
 	if (configsPageBox) {
-		ReactDOM.render(<Configs isWidget={false} />, configsPageBox);
+		createRoot(configsPageBox).render(<Configs isWidget={false} />);
 	}
 	const configsWidgetBox = document.getElementById('smush-widget-configs');
 	if (configsWidgetBox) {
-		ReactDOM.render(<Configs isWidget={true} />, configsWidgetBox);
+		createRoot(configsWidgetBox).render(<Configs isWidget={true} />);
 	}
 });

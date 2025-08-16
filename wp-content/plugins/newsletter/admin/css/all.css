@@ -429,9 +429,10 @@ table.clicks {
 }
 
 .tnp-tab-notice {
-    padding: 15px;
+    padding: 1rem;
     border: 1px dashed #999;
     background-color: var(--tnp-blue-lighter);
+    margin-bottom: 1rem;
 }
 
 .tnp-tab-warning {
@@ -1229,7 +1230,7 @@ span.tnp-user-status {
     display: block;
     padding: 10px 10px;
     text-decoration: none;
-    font-size: 1rem;
+    font-size: .9rem;
 }
 
 #tnp-menu ul li a:focus {
@@ -1349,14 +1350,14 @@ span.tnp-user-status {
     The head section of each administration page with title and introduction
 */
 #tnp-heading {
-    padding: 1rem 0px;
+    padding: .5rem 0px;
     margin-bottom: 1.2rem;
     margin-left: -20px;
     margin-right: -20px;
     padding-left: 20px;
     padding-right: 20px;
     border-bottom: 1px solid #d6d6d6;
-    padding-bottom: .6rem;
+    /*padding-bottom: .6rem;*/
     background-color: #f8f8f8;
 
 }
@@ -1367,8 +1368,7 @@ span.tnp-user-status {
     font-size: .9rem;
     line-height: normal;
     vertical-align: middle;
-    font-weight: bold;
-    font-weight: normale;
+    font-weight: normal;
     padding: 0;
     margin: 0px;
     margin-bottom: .5rem;
@@ -1498,9 +1498,9 @@ span.tnp-user-status {
 
 
 /* For pages that need a sub menu */
-#tnp-heading .tnp-nav {
+#tnp-heading ul.tnp-nav {
     /*background-color: var(--tnp-gray);*/
-    padding: 5px 0 0 0;
+    padding: 0;
     width: fit-content;
     font-size: 0; /* To rmeove the element spacing */
     line-height: normal;
@@ -1522,8 +1522,9 @@ span.tnp-user-status {
 #tnp-heading .tnp-nav li a ,
 #tnp-heading .tnp-nav li a:focus,
 #tnp-heading .tnp-nav li a:visited,
-#tnp-heading .tnp-nav li a:active {
-    font-size: 1rem;
+#tnp-heading .tnp-nav li a:active,
+#tnp-heading .tnp-nav li.tnp-nav-title {
+    font-size: .9rem;
     color: var(--tnp-text) !important;
     /*color: #ddd !important;*/
     /*display: inline-block;*/
@@ -1536,6 +1537,38 @@ span.tnp-user-status {
     box-shadow: none;
 }
 
+#tnp-heading .tnp-nav li.tnp-nav-title {
+    font-size: .8rem;
+    /*line-height: normal;*/
+    /*vertical-align: middle;*/
+    font-weight: normal;
+    padding: 0;
+    margin: 0px;
+    margin-left: -20px;
+    /*margin-bottom: .5rem;*/
+    text-transform: uppercase;
+    background-color: var(--tnp-green);
+    color: #fff !important;
+    margin-right: 1rem;
+    padding: 5px;
+    border-top-right-radius: 1000px;
+    border-bottom-right-radius: 1000px;
+    padding-right: .8rem;
+    padding-left: .5rem;
+}
+
+#tnp-heading ul.tnp-nav li.tnp-nav-title a {
+    color: #fff !important;
+    font-size: .9rem;
+    text-decoration: none;
+}
+
+/* The "back" entry */
+#tnp-heading ul.tnp-nav li.tnp-nav-title a i {
+    display: inline-block;
+    margin: 0 .5em;
+}
+
 #tnp-heading .tnp-nav li.active {
     /*background-color: #fff !important;*/
     /*border-left: 1px solid transparent;*/
@@ -1543,19 +1576,19 @@ span.tnp-user-status {
 
 #tnp-heading .tnp-nav li.active a {
     /*color: var(--tnp-text) !important;*/
-    color: #000 !important;
-    font-weight: normal !important;
+    /*color: #000 !important;*/
+    font-weight: bolder !important;
     display: inline-block;
-    border-bottom: 3px solid var(--tnp-title);
+    /*border-bottom: 3px solid var(--tnp-title);*/
 }
 
-#tnp-heading .tnp-nav-title {
+/*#tnp-heading .tnp-nav-title {
     background-color: var(--tnp-orange) !important;
     text-transform: uppercase;
     font-size: .9rem;
     font-weight: normal !important;
     color: #fff !important;
-}
+}*/
 
 #tnp-heading .tnp-nav span.tnp-pro-badge {
     background-color: #000;
@@ -1568,7 +1601,55 @@ span.tnp-user-status {
     border-radius: 5px;
     position: relative;
     top: -5px;
-}#tnp-footer {
+}
+
+
+#tnp-heading .tnp-nav li.tnp-nav-badge {
+    background-color: transparent;
+    /*border: 1px solid #999;*/
+    font-weight: normal !important;
+    display: inline-block;
+    padding: .3rem 1rem;
+    font-size: .75rem;
+    border-radius: 7px;
+    /*vertical-align: middle;*/
+    color: #444 !important;
+    /*margin-left: 2em;*/
+    box-shadow: 0 0 3px #ccc;
+}
+
+#tnp-heading .tnp-nav li.tnp-nav-badge.green
+{
+    /*background-color: green;*/
+    border: 1px solid green;
+    font-weight: normal;
+    /*color: #fff !important;*/
+}
+
+#tnp-heading .tnp-nav li.tnp-nav-badge.red
+{
+    /*background-color: red;*/
+    border: 1px solid red;
+    font-weight: normal;
+    /*color: #fff !important;*/
+}
+
+#tnp-heading .tnp-nav li.tnp-nav-badge.orange
+{
+    /*background-color: var(--tnp-orange);*/
+    border: 1px solid var(--tnp-orange);
+    font-weight: normal;
+    color: #444 !important;
+}
+
+#tnp-heading .tnp-nav li.tnp-nav-badge.blue
+#tnp-heading h2 span.tnp-badge-blue a {
+    /*background-color: var(--tnp-blue);*/
+    border: 1px solid var(--tnp-blue);
+    font-weight: normal;
+    /*color: #fff !important;*/
+}
+#tnp-footer {
     display: flex;
     justify-content: space-between;
     align-items: flex-start;
@@ -1679,6 +1760,21 @@ span.tnp-user-status {
     border: 1px dashed #ccc;
     background-color: #f4f4f4;
 }
+
+.tnp-flow-item.green {
+    border: 1px dashed #ccc;
+    background-color: var(--tnp-green-lighter);
+    color: var(--tnp-green-dark) !important;
+    font-weight: bold;
+}
+
+.tnp-flow-item.red {
+    border: 1px dashed #ccc;
+    background-color: var(--tnp-red-lighter);
+    color: var(--tnp-red-dark) !important;
+    font-weight: bold;
+}
+
 
 .tnp-flow-item.notusable {
     border: 1px dashed #ccc;
@@ -1815,13 +1911,18 @@ span.tnp-user-status {
     max-width: 100%;
 }
 
+/*#tnp-body #tabs>div,
+#tnp-body .tnp-tabs>div
+{
+    display: none;
+}*/
+
 #tnp-body li.ui-tabs-tab {
     margin-top: 0;
 }
 
 
 /* Navigation */
-
 #tnp-body .ui-tabs .ui-tabs-nav {
     padding: 0;
     margin: 0;
@@ -1832,6 +1933,10 @@ span.tnp-user-status {
     border-bottom-right-radius: 0;
     width: fit-content;
     border-bottom: 1px solid #ddd;
+}
+
+#tnp-body .ui-tabs .ui-tabs-nav li {
+    margin-right: 0;
 }
 
 #tnp-body .ui-tabs .ui-tabs-nav .ui-tabs-tab {
@@ -1902,6 +2007,12 @@ span.tnp-user-status {
     padding-left: 16px;
     padding-right: 16px;
     margin-bottom: 16px;
+}
+
+/* Fixes H3 when the composer is inside a standard admin page... */
+#tnp-body .ui-accordion h3.ui-accordion-header {
+    font-size: 100%;
+    font-weight: normal;
 }
 
 /* Classes used by controls. Should be prefixed with "tnpc-" */
@@ -2237,11 +2348,56 @@ span.tnp-user-status {
 }
 
 /* Buttons */
-.tnpc-button, .tnpc-button:visited, .tnpc-button:hover, .tnpc-button:active {
+#tnp-body .tnpc-button,
+#tnp-body .tnpc-button:visited,
+#tnp-body .tnpc-button:hover,
+#tnp-body .tnpc-button:active {
+    display: inline-block;
     min-width: 3em;
     text-align: center;
     color: #fff!important;
     width: auto;
+    border-radius: 1000px !important;
+    border: none;
+    background-color: var(--tnp-blue-dark);
+    font-size: .9rem !important;
+    padding: 0 12px !important;
+    margin: 0;
+    margin-right: 3px;
+    font-weight: normal;
+    vertical-align: bottom;
+    box-shadow: none;
+    min-height: 30px;
+    line-height: 30px; /* for links */
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+#tnp-body .tnpc-button:hover {
+        filter: brightness(120%);
+}
+
+#tnp-body .tnpc-button.tnpc-button-secondary,
+#tnp-body .tnpc-button.tnpc-button-secondary:visited,
+#tnp-body .tnpc-button.tnpc-button-secondary:hover,
+#tnp-body .tnpc-button.tnpc-button-secondary:active {
+    background-color: var(--tnp-gray-light);
+}
+
+#tnp-body .tnpc-button.tnpc-button-tertiary,
+#tnp-body .tnpc-button.tnpc-button-tertiary:visited,
+#tnp-body .tnpc-button.tnpc-button-tertiary:hover,
+#tnp-body .tnpc-button.tnpc-button-tertiary:active {
+    background-color: var(--tnp-gray-lighter) !important;
+    color: var(--tnp-gray-dark) !important;
+    border: 1px solid var(--tnp-gray) !important;
+}
+
+#tnp-body .tnpc-button.tnpc-button-delete,
+#tnp-body .tnpc-button.tnpc-button-delete:visited,
+#tnp-body .tnpc-button.tnpc-button-delete:hover,
+#tnp-body .tnpc-button.tnpc-button-delete:active {
+    background-color: var(--tnp-red-dark);
 }
 
 /* Lists select with triggers */
