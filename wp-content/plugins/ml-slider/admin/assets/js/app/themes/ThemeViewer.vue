@@ -30,7 +30,12 @@
 				{{ __('This theme was designed for FlexSlider. Please choose the FlexSlider option for the best display.', 'ml-slider') }}
 			</p>
 			<!-- Notice when "Recommended Theme Options" is disabled -->
-			<p v-if="!Number(autoThemeConfig)" class="slider-not-supported-warning" v-html="recommendedThemeOptionsNotice"></p>
+			<div v-if="!Number(autoThemeConfig) && !Number(themeNoticeDismissed)">
+				<p class="slider-not-supported-warning">
+					<button class="is-dismissible float-right ml-2" type="button" @click="dismissThemeNotice" :aria-label="__('Dismiss this notice.', 'ml-slider')">&#x2715;</button>
+					<span v-html="recommendedThemeOptionsNotice"></span>
+				</p>
+			</div>
 
 			<!-- If there's a theme already set -->
 			<div
@@ -101,13 +106,13 @@
 			<!-- If no theme then we render the theme select button -->
 			<div v-else>
 				<p>
-					{{ __('Change the design of your slideshow with a stylish MetaSlider theme!', 'ml-slider') }}
+					{{ __('Change the design of your slideshow with a stylish MetaSlider Slideshow theme!', 'ml-slider') }}
 				</p>
 				<button
 					v-if="Object.keys(themes).length || Object.keys(customThemes).length"
 					type="button"
 					class="button"
-					@click="openModal">{{ __('Select a custom theme', 'ml-slider') }}
+					@click="openModal">{{ __('Select a theme', 'ml-slider') }}
 				</button>
 			</div>
 
@@ -136,7 +141,12 @@
 						<div class="columns">
 							<div class="theme-list-column">
 								<!-- Notice when "Recommended Theme Options" is disabled -->
-								<div v-if="!Number(autoThemeConfig)" class="slider-not-supported-warning" style="margin: 0 !important" v-html="recommendedThemeOptionsNotice"></div>
+								<div v-if="!Number(autoThemeConfig) && !Number(themeNoticeDismissed)">
+									<p class="slider-not-supported-warning m-0">
+										<button type="button" class="is-dismissible float-right ml-2" @click="dismissThemeNotice" :aria-label="__('Dismiss this notice.', 'ml-slider')">&#x2715;</button>
+										<span v-html="recommendedThemeOptionsNotice"></span>
+									</p>
+								</div>
 								<ul class="ms-image-selector regular-themes">
 									<li
 										v-if="themes && Object.keys(themes).length"
@@ -155,7 +165,7 @@
 											<div 
 												v-if="revealThemeAd === theme.folder"
 												class="custom-theme-single upgrade-pro-theme-ad">
-												<h3 class="text-white mb-3">{{ __('Get MetaSlider Pro!', 'ml-slider') }}</h3>
+												<h3 class="text-white mb-3">{{ __('Get MetaSlider Slideshow Pro!', 'ml-slider') }}</h3>
 												<p class="text-white font-normal text-sm mb-3">
 													{{ __('Upgrade now to unlock this theme!', 'ml-slider') }}
 												</p>
@@ -211,7 +221,7 @@
 										<li class="a-theme">
 											<span>
 												<div class="custom-theme-single upgrade-pro-theme-ad">
-													<h3 class="text-white mb-3">{{ __('MetaSlider Pro is installed!', 'ml-slider') }}</h3>
+													<h3 class="text-white mb-3">{{ __('MetaSlider Slideshow Pro is installed!', 'ml-slider') }}</h3>
 													<p class="text-white font-normal text-sm mb-3">
 														{{ __('You can create your own themes with our theme editor', 'ml-slider') }}
 													</p>
@@ -224,7 +234,7 @@
 										<li class="a-theme unlock-pro-custom-themes-ad">
 											<span>
 												<div class="custom-theme-single upgrade-pro-theme-ad custom-theme-editor">
-													<h3 class="text-white mb-3">{{ __('Get MetaSlider Pro!', 'ml-slider') }}</h3>
+													<h3 class="text-white mb-3">{{ __('Get MetaSlider Slideshow Pro!', 'ml-slider') }}</h3>
 													<p class="text-white font-normal text-sm mb-3">
 														{{ __('Upgrade now to build your own custom themes!', 'ml-slider') }}
 													</p>
@@ -298,8 +308,8 @@
 									</template>
 									<template v-else>
 										<div>
-											<h1 class="metaslider-theme-title">{{ __('Get MetaSlider Pro!', 'ml-slider') }}</h1>
-											<p>{{ __('MetaSlider Pro gives you access to extra themes. You can also create completely new themes that can easily be added to new slideshows.', 'ml-slider') }}</p>
+											<h1 class="metaslider-theme-title">{{ __('Get MetaSlider Slideshow Pro!', 'ml-slider') }}</h1>
+											<p>{{ __('MetaSlider Slideshow Pro gives you access to extra themes. You can also create completely new themes that can easily be added to new slideshows.', 'ml-slider') }}</p>
 										</div>
 									</template>
 								</template>
@@ -331,7 +341,7 @@
                             {{ __('Preview', 'ml-slider') }}
 						</button>
 						<button
-							:disabled="!selectedTheme.folder"
+							:disabled="!selectedTheme.folder || savingTheme"
 							class="button button-primary"
 							@click.stop.prevent="setTheme">{{ __('Select', 'ml-slider') }}
 						</button>
@@ -344,6 +354,7 @@
 
 <script>
 import { EventManager } from '../utils'
+import Settings from '../api/Settings'
 import { Axios } from '../api'
 import './components'
 import { mapGetters } from 'vuex'
@@ -365,6 +376,7 @@ export default {
 			loading: true,
 			loadingCustom: true,
 			unsupportedSliderType: false,
+			themeNoticeDismissed: Number(window.metaslider_api.theme_notice_dismissed),
 			themes: {},
 			customThemes: {},
 			selectedTheme: {},
@@ -372,7 +384,8 @@ export default {
 			is_open: false,
 			revealThemeAd: null,
 			theme_customize: [], // @TODO Maybe declare as {} ?
-			theme_edit_settings: {}
+			theme_edit_settings: {},
+			savingTheme: false
 		}
 	},
 	watch: {
@@ -515,6 +528,10 @@ export default {
 		this.setColorPicker();
 	},
 	methods: {
+		dismissThemeNotice() {
+			this.themeNoticeDismissed = true
+			Settings.saveUserSetting('theme_notice_dismissed', '1')
+		},
 		fetchThemes() {
 
 			// Pre-built themes
@@ -552,12 +569,18 @@ export default {
 			this.setTheme()
 		},
 		setTheme() {
+			// A previous selection's auto-apply/auto-save chain (below) can still be running -
+			// letting a new one start concurrently is what causes #2362's Vue diffing crash
+			if (this.savingTheme) return
+			this.savingTheme = true
+
 			this.notifyInfo('metaslider/theme-updating', this.__('Saving theme...', 'ml-slider'))
 			this.$refs.themesModal.close()
 
 			// If the selected theme is set and already the current theme, do nothing
 			if (Object.keys(this.selectedTheme).length && Object.is(this.selectedTheme.folder, this.current.theme.folder)) {
 				this.notifySuccess('metaslider/theme-updated', this.__('Theme saved', 'ml-slider'), true)
+				this.savingTheme = false
 			} else {
 				this.$store.commit('slideshows/updateTheme', this.selectedTheme)
 
@@ -601,35 +624,18 @@ export default {
 					if (Number(this.autoThemeConfig)) {
 						this.theme_edit_settings = this.selectedTheme.edit_settings ?? {};
 						this.updateEditSettings();
+					} else {
+						this.savingTheme = false
 					}
 				}).catch(error => {
 					this.notifyError('metaslider/theme-error', error, true)
+					this.savingTheme = false
 				})
 			}
 		},
 		setColorPicker() {
-			var $ = window.jQuery;
-			$('.static-theme-customize .colorpicker').each(function () {
-				$(this).wpColorPicker({
-					change: function(event, ui) {
-						var input = $(this).parents('.wp-picker-container').find('input.colorpicker');
-						var btn = $(this).parents('.wp-picker-container').find('button.wp-color-result');
-			
-						btn.css('background-color',ui.color.toCSS('rgba'));
-			
-						input.data('new-color',ui.color.toCSS('rgba'));
-						input.attr('value',ui.color.toCSS('rgba'));
-			
-						btn.trigger('change');
-					}
-				}).promise().done(function() {
-					var text = typeof metaslider !== 'undefined' ? metaslider : null;
-					if (text) {
-						$(this).parents('.wp-picker-container').find('.iris-strip').eq(0).prepend(`<span class="ms-color-tooltip">${text.tone}</span>`);
-						$(this).parents('.wp-picker-container').find('.iris-strip').eq(1).prepend(`<span class="ms-color-tooltip">${text.opacity}</span>`);
-					}
-				});
-			});
+			var text = typeof metaslider !== 'undefined' ? metaslider : null;
+			window.metaslider.init_color_picker('.static-theme-customize .colorpicker', text);
 		},
 		updateColorPicker() {
 			this.$nextTick( function () {
@@ -673,9 +679,12 @@ export default {
 						}
 					}
 
-					setTimeout(function () {
+					setTimeout(() => {
 						EventManager.$emit('metaslider/save');
+						this.savingTheme = false
 					}, 1000);
+				} else {
+					this.savingTheme = false
 				}
 			});
 		},
@@ -751,8 +760,8 @@ export default {
 </script>
 
 <style lang="scss">
-	@import '../assets/styles/globals.scss';
-	@import '../assets/styles/mixins.scss';
+	@use '../assets/styles/globals.scss' as *;
+	@use '../assets/styles/mixins.scss' as *;
 
 	@mixin custom-theme-box() {
 		.theme-image-wrapper {
