@@ -134,37 +134,23 @@ ol,ul{box-sizing:border-box}:root :where(.wp-block-list.has-background){padding:
   }
 </script>
 
+
 <script async src="https://www.googletagmanager.com/gtag/js?id=AW-980005658"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
 
-  // Default: denied until user accepts
+  // Default: denied finche' l'utente non accetta (richiesto dalla normativa privacy)
   gtag('consent', 'default', {
     'ad_storage': 'denied',
     'analytics_storage': 'denied'
   });
-</script>
-
-
-<script async src="https://www.googletagmanager.com/gtag/js?id=AW-980005658"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
 
   gtag('config', 'AW-980005658');
-</script>
-<script>
   gtag('config', 'AW-980005658/3Ot6CODGoOcYEJrmptMD', {
     'phone_conversion_number': '3460410340'
   });
-</script>
-
-
-<script>
-!function(w,d){if(!w.rdt){var p=w.rdt=function(){p.sendEvent?p.sendEvent.apply(p,arguments):p.callQueue.push(arguments)};p.callQueue=[];var t=d.createElement("script");t.src="https://www.redditstatic.com/ads/pixel.js",t.async=!0;var s=d.getElementsByTagName("script")[0];s.parentNode.insertBefore(t,s)}}(window,document);rdt('init','a2_hijcixvw9bs4');rdt('track', 'PageVisit');
 </script>
 
 
@@ -185,14 +171,11 @@ src="https://www.facebook.com/tr?id=3807135296226501&ev=PageView&noscript=1"
 /></noscript>
 
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=AW-980005658"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
 
-  gtag('config', 'AW-980005658');
+<script>
+!function(w,d){if(!w.rdt){var p=w.rdt=function(){p.sendEvent?p.sendEvent.apply(p,arguments):p.callQueue.push(arguments)};p.callQueue=[];var t=d.createElement("script");t.src="https://www.redditstatic.com/ads/pixel.js",t.async=!0;var s=d.getElementsByTagName("script")[0];s.parentNode.insertBefore(t,s)}}(window,document);rdt('init','a2_hijcixvw9bs4');rdt('track', 'PageVisit');
 </script>
+
 		<script>
 			document.documentElement.className = document.documentElement.className.replace('no-js', 'js');
 		</script>
@@ -470,23 +453,31 @@ article div.post__img{border-radius: 15px;}
 
 
 <script>
-function gtag_report_conversion(url) {
-  var callback = function () {
-    if (typeof(url) != 'undefined') {
-      window.location = url;
-    }
+function gtag_report_conversion(form) {
+  var submitted = false;
+  var doSubmit = function () {
+    if (submitted) return;
+    submitted = true;
+    HTMLFormElement.prototype.submit.call(form);
   };
-  gtag('event', 'conversion', {
-      'send_to': 'AW-980005658/Zp1vCPritdIZEJrmptMD',
-      'event_callback': callback
-  });
+  try {
+    if (typeof gtag === 'function') {
+      gtag('event', 'conversion', {
+          'send_to': 'AW-980005658/Zp1vCPritdIZEJrmptMD',
+          'event_callback': doSubmit
+      });
+    }
+  } catch (e) {}
+  // Fallback indipendente da gtag.js: se il tag non risponde entro 0.5s
+  // (adblocker, rete bloccata, tag non caricato), invia comunque il form.
+  setTimeout(doSubmit, 500);
   return false;
 }
 </script>
 
 <div style="margin:10px">
 <div style="text-align:center;margin:0 0 1em 0"><a href="https://wa.me/393460410340" target="_self" rel="noopener"><i class="fa fa-whatsapp"></i> Whatsapp</a></li> - <tel>3460410340</tel></div>
-<form action="https://usebasin.com/f/465a62a87ae7" method="POST" onsubmit="gtag_report_conversion()">
+<form action="https://usebasin.com/f/465a62a87ae7" method="POST" onsubmit="return gtag_report_conversion(this)">
 <fieldset class="form-group col-md-6">
     <label for="email" class="form-label"> Indirizzo Email (necessario)</label>
     <input type="email" class="wpcf7-form-control wpcf7-text" id="email" name="email" />
@@ -506,7 +497,6 @@ function gtag_report_conversion(url) {
 
 </form>
 </div>
-
         </div>
     </div>
 
@@ -540,23 +530,31 @@ function gtag_report_conversion(url) {
   </main>
 <div class="container"><h3 style="text-align: center;">Richiedi subito un <strong>appuntamento</strong></h3>
 <p style="text-align: center; margin: 1em"><script>
-function gtag_report_conversion(url) {
-  var callback = function () {
-    if (typeof(url) != 'undefined') {
-      window.location = url;
-    }
+function gtag_report_conversion(form) {
+  var submitted = false;
+  var doSubmit = function () {
+    if (submitted) return;
+    submitted = true;
+    HTMLFormElement.prototype.submit.call(form);
   };
-  gtag('event', 'conversion', {
-      'send_to': 'AW-980005658/Zp1vCPritdIZEJrmptMD',
-      'event_callback': callback
-  });
+  try {
+    if (typeof gtag === 'function') {
+      gtag('event', 'conversion', {
+          'send_to': 'AW-980005658/Zp1vCPritdIZEJrmptMD',
+          'event_callback': doSubmit
+      });
+    }
+  } catch (e) {}
+  // Fallback indipendente da gtag.js: se il tag non risponde entro 0.5s
+  // (adblocker, rete bloccata, tag non caricato), invia comunque il form.
+  setTimeout(doSubmit, 500);
   return false;
 }
 </script>
 
 <div style="margin:10px">
 <div style="text-align:center;margin:0 0 1em 0"><a href="https://wa.me/393460410340"  target="_self"><i class="fa fa-whatsapp"></i> Whatsapp</a></li> - <tel>3460410340</tel></div>
-<form action="https://usebasin.com/f/465a62a87ae7" method="POST" onsubmit="gtag_report_conversion()">
+<form action="https://usebasin.com/f/465a62a87ae7" method="POST" onsubmit="return gtag_report_conversion(this)">
 <fieldset class="form-group col-md-6">
     <label for="email" class="form-label"> Indirizzo Email (necessario)</label>
     <input type="email" class="wpcf7-form-control wpcf7-text" id="email" name="email" />
@@ -575,8 +573,7 @@ function gtag_report_conversion(url) {
 </fieldset>
 
 </form>
-</div>
-</p>
+</div></p>
 <div style="margin:2em"><br /></div>
 <style id='prefooter-style'></style></div>
 
@@ -689,23 +686,7 @@ function gtag_report_conversion(url) {
 		<script type="speculationrules">
 {"prefetch":[{"source":"document","where":{"and":[{"href_matches":"/*"},{"not":{"href_matches":["/wp-*.php","/wp-admin/*","/wp-content/uploads/*","/wp-content/*","/wp-content/plugins/*","/wp-content/themes/ident-child/*","/wp-content/themes/ident/*","/*\\?(.+)"]}},{"not":{"selector_matches":"a[rel~=\"nofollow\"]"}},{"not":{"selector_matches":".no-prefetch, .no-prefetch a"}}]},"eagerness":"conservative"}]}
 </script>
-<input id="anps-theme-plugin-url" type="hidden" value="https://www.gnatos.it/wp-content/plugins/anps_theme_plugin">
-<script>
-!function(f,b,e,v,n,t,s)
-{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];
-s.parentNode.insertBefore(t,s)}(window, document,'script',
-'https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', '3807135296226501');
-fbq('track', 'PageView');
-</script>
-<noscript><img height="1" width="1" style="display:none"
-src="https://www.facebook.com/tr?id=3807135296226501&ev=PageView&noscript=1"
-/></noscript>
-<script id="anps-elementor-js-js" src="https://www.gnatos.it/wp-content/plugins/anps_theme_plugin/elementor_sc/js/custom.js"></script>
+<input id="anps-theme-plugin-url" type="hidden" value="https://www.gnatos.it/wp-content/plugins/anps_theme_plugin"><script id="anps-elementor-js-js" src="https://www.gnatos.it/wp-content/plugins/anps_theme_plugin/elementor_sc/js/custom.js"></script>
 <script id="google_business_reviews_rating_wp_js-js" src="https://www.gnatos.it/wp-content/plugins/g-business-reviews-rating/wp/js/js.js?ver=6.1"></script>
 <script id="twenty20-eventmove-js" src="https://www.gnatos.it/wp-content/plugins/twenty20/assets/js/jquery.event.move.js?ver=2.0.4"></script>
 <script id="twenty20-js" src="https://www.gnatos.it/wp-content/plugins/twenty20/assets/js/jquery.twenty20.js?ver=2.0.4"></script>
