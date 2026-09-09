@@ -5,3 +5,10 @@
 * Template: ident
 * Version: 2.1.0
 */
+
+/* Logo mobile: riusa lo stesso file del logo sticky (Gnatos-Logo-No-Slogan-1.svg)
+   invece di un secondo SVG separato identico scalato al 75%: risparmia una
+   richiesta HTTP, riproducendo la stessa resa visiva via transform CSS. */
+.anps-logo__mobile img {
+	transform: scale(0.75);
+}
