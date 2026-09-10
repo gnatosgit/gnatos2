@@ -1577,7 +1577,7 @@ jQuery(function ($) {
       format: "YYYY-MM-DD",
     });
   } else {
-    $(".wpcf7-form .wpcf7-date").val(moment().format("YYYY-MM-DD"));
+    $(".wpcf7-form .wpcf7-date").val(new Date().toISOString().slice(0, 10));
   }
 
   //Contact form input checkbox
