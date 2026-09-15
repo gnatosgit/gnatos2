@@ -12,3 +12,36 @@
 .anps-logo__mobile img {
 	transform: scale(0.75);
 }
+
+/* Fix contrasto testo/sfondo sotto la soglia WCAG AA (4.5:1 testo normale, 3:1 testo
+   grande), segnalato da un audit di accessibilità. Ratio misurati con Chromium headless
+   prima/dopo, vedi dettagli forniti in chat. */
+
+/* Dropdown menu header ("Servizi" ecc.): grigio #8c8c8c su bianco era 3.36:1 -> 7.0:1 */
+:root {
+	--anps-submenu-color: #595959;
+}
+
+/* Copyright footer: #9294a3 su #fcfcfc era 2.93:1 -> 6.26:1 */
+.copyright-footer {
+	color: #5c5e6b !important;
+}
+
+/* Banner cookie (Insert Headers and Footers): il link "Privacy Policy" erediva il colore
+   scuro di default dei link (#383e48) sopra uno sfondo #222 -> 1.48:1. Il banner ha già
+   color:#fff sul contenitore, allineo il link. */
+#cookie-banner a {
+	color: #fff;
+}
+
+/* Sezione home "Il nostro approccio / Scopri i nostri servizi" (WPBakery, colori impostati
+   inline in post_content): testo ciano #39d9e0 su bianco era 1.72:1, testo bianco su sfondo
+   ciano #24d0d8 era 1.89:1 -> nuovo ciano #00707d porta entrambi sopra 4.5:1. */
+[style*="color: #39d9e0"],
+[style*="color: rgb(57, 217, 224)"] {
+	color: #00707d !important;
+}
+.wpb_row.vc_custom_1543566816949,
+.wpb_row.vc_custom_1543566838127 {
+	background-color: #00707d !important;
+}
