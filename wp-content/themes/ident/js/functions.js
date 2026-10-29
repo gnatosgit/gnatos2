@@ -1100,7 +1100,7 @@ jQuery(function ($) {
       $(".page-header").find(".page-header-video").remove();
     }
 
-    if ($("#ytplayer")) {
+    if ($("#ytplayer").length) {
       $("body").append('<script src="https://www.youtube.com/player_api">');
     }
   }
