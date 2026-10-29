@@ -625,7 +625,7 @@ jQuery.fn.isOnScreen=function(){var win=jQuery(window);var viewport={top:win.scr
 $(".anps-counter").eq(index).addClass("animated");}});}
 checkForOnScreen();$(window).scroll(function(){checkForOnScreen();});function pageHeaderVideoSize(){$(".page-header iframe").height($(window).width()/1.77777777778);}
 if($(".page-header").length){pageHeaderVideoSize();$(window).on("resize",pageHeaderVideoSize);if(isMobile){$(".page-header").find(".page-header-video").remove();}
-if($("#ytplayer")){$("body").append('<script src="https://www.youtube.com/player_api">');}}
+if($("#ytplayer").length){$("body").append('<script src="https://www.youtube.com/player_api">');}}
 function isFloat(n){return parseFloat(n.match(/^-?\d*(\.\d+)?$/))>0;}
 function checkCoordinates(str){if(!str){return false;}
 str=str.split(",");var isCoordinate=true;if(str.length!==2||!isFloat(str[0].trim())||!isFloat(str[1].trim())){isCoordinate=false;}

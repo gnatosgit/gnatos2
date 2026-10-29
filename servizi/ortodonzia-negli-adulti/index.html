@@ -83,73 +83,77 @@ img:is([sizes=auto i],[sizes^="auto," i]){contain-intrinsic-size:3000px 1500px}
 
 <link rel='shortlink' href='https://www.gnatos.it/?p=1075' />
 
-<div id="cookie-banner" style="position:fixed;bottom:0;left:0;width:100%;background:#222;color:#fff;padding:15px;text-align:center;z-index:9999;">
-  Questo sito utilizza cookies per il salvataggio dei dati
-  <button onclick="acceptCookies()" style="margin-left:10px;padding:5px 10px;background-color:#0F52BA">Accetta</button>
-  <button onclick="rejectCookies()" style="margin-left:10px;padding:5px 10px;background-color:#0F52BA">Rifiuta</button>
-	<p style="font-size:60%;text-align:center; font-color:#fff">
-		Consulta la nostra <a href="/privacy-policy/" style="font-weight:bold">Privacy Policy</a> per maggiori dettagli
+<div id="cookie-banner" style="display:none;position:fixed;bottom:0;left:0;width:100%;background:#222;color:#fff;padding:15px;text-align:center;z-index:9999;">
+  Questo sito usa cookie tecnici necessari al funzionamento e, solo con il tuo consenso, un cookie di Google Ads che ci permette di sapere se l'invio del modulo di contatto arriva da un nostro annuncio. Puoi cambiare idea in qualsiasi momento dal link "Preferenze cookie" in fondo alla pagina.
+  <button onclick="acceptCookies()" style="margin-left:10px;padding:5px 10px;background-color:#0F52BA;color:#fff;border:0">Accetta</button>
+  <button onclick="rejectCookies()" style="margin-left:10px;padding:5px 10px;background-color:#0F52BA;color:#fff;border:0">Rifiuta</button>
+	<p style="font-size:60%;text-align:center;color:#fff">
+		Consulta la nostra <a href="/cookie-policy/" style="font-weight:bold;color:#fff">Cookie Policy</a> e la <a href="/privacy-policy/" style="font-weight:bold;color:#fff">Privacy Policy</a> per maggiori dettagli
 	</p>
 </div>
 
 <script>
-  function acceptCookies() {
-    gtag('consent', 'update', {
-      'ad_storage': 'granted',
-      'analytics_storage': 'granted'
-    });
-    document.getElementById('cookie-banner').style.display = 'none';
-    localStorage.setItem('cookieConsent','accepted');
-  }
-  function rejectCookies() {
-    gtag('consent', 'update', {
-      'ad_storage': 'denied',
-      'analytics_storage': 'denied'
-    });
-    document.getElementById('cookie-banner').style.display = 'none';
-    localStorage.setItem('cookieConsent','rejected');
-  }
-  // restore state
-  if(localStorage.getItem('cookieConsent')) {
-    document.getElementById('cookie-banner').style.display = 'none';
-  }
-</script>
-
-
-<script async src="https://www.googletagmanager.com/gtag/js?id=AW-980005658"></script>
-<script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-
-  // Default: denied finche' l'utente non accetta (richiesto dalla normativa privacy)
   gtag('consent', 'default', {
     'ad_storage': 'denied',
+    'ad_user_data': 'denied',
+    'ad_personalization': 'denied',
     'analytics_storage': 'denied'
   });
 
-  gtag('config', 'AW-980005658');
-  gtag('config', 'AW-980005658/3Ot6CODGoOcYEJrmptMD', {
-    'phone_conversion_number': '3460410340'
-  });
-</script>
+  var trackersLoaded = false;
+  function loadTrackers() {
+    if (trackersLoaded) return;
+    trackersLoaded = true;
+    gtag('consent', 'update', {
+      'ad_storage': 'granted',
+      'ad_user_data': 'granted'
+    });
+    gtag('set', 'allow_ad_personalization_signals', false);
+    var g = document.createElement('script');
+    g.async = true;
+    g.src = 'https://www.googletagmanager.com/gtag/js?id=AW-980005658';
+    document.head.appendChild(g);
+    gtag('js', new Date());
+    gtag('config', 'AW-980005658', { 'send_page_view': false });
+  }
 
+  function getConsent() {
+    try { return localStorage.getItem('gnatosConsent2026'); } catch (e) { return null; }
+  }
+  function setConsent(v) {
+    try { localStorage.setItem('gnatosConsent2026', v); } catch (e) {}
+  }
 
-<script>
-!function(f,b,e,v,n,t,s)
-{if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};
-if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
-n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];
-s.parentNode.insertBefore(t,s)}(window, document,'script',
-'https://connect.facebook.net/en_US/fbevents.js');
-fbq('init', '3807135296226501');
-fbq('track', 'PageView');
+  function acceptCookies() {
+    setConsent('accepted');
+    document.getElementById('cookie-banner').style.display = 'none';
+    loadTrackers();
+  }
+  function rejectCookies() {
+    var wasAccepted = getConsent() === 'accepted';
+    setConsent('rejected');
+    document.getElementById('cookie-banner').style.display = 'none';
+    if (wasAccepted) {
+      document.cookie.split(';').forEach(function (c) {
+        var name = c.split('=')[0].trim();
+        if (/^(_gcl|_ga|_gid|_gac)/.test(name)) {
+          ['', '; domain=.gnatos.it', '; domain=www.gnatos.it'].forEach(function (d) {
+            document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/' + d;
+          });
+        }
+      });
+      location.reload();
+    }
+  }
+  function showCookieBanner() {
+    document.getElementById('cookie-banner').style.display = 'block';
+  }
+
+  if (getConsent() === 'accepted') loadTrackers();
+  else if (!getConsent()) showCookieBanner();
 </script>
-<noscript><img height="1" width="1" style="display:none"
-src="https://www.facebook.com/tr?id=3807135296226501&ev=PageView&noscript=1"
-/></noscript>
 <script>document.createElement( "picture" );if(!window.HTMLPictureElement && document.addEventListener) {window.addEventListener("DOMContentLoaded", function() {var s = document.createElement("script");s.src = "https://www.gnatos.it/wp-content/plugins/webp-express/js/picturefill.min.js";document.body.appendChild(s);});}</script>
 
 <link rel="icon" href="https://www.gnatos.it/wp-content/uploads/2023/08/cropped-512-Site-Icon.png" sizes="32x32" />
@@ -584,7 +588,7 @@ function gtag_report_conversion(form) {
           <div class="copyright-footer copyright-footer--shadow">
         <div class="container">
           <div class="copyright-footer__row">
-                          <div class="copyright-footer__col"><div id="text-8" class="widget widget_text">			<div class="textwidget"><p>Copyright © 2023 by Studio Dentistico Gnatos. All rights reserved. <br />Informazione sanitaria ai sensi della legge 248/2006 e 145/2018. Dir. San. Dott A. Zamboni Albo Odontoiatri Di Verona VR01265</p>
+                          <div class="copyright-footer__col"><div id="text-8" class="widget widget_text">			<div class="textwidget"><p>Copyright © 2023 by Studio Dentistico Gnatos - P.IVA 04127490235. All rights reserved. <a href="#" onclick="showCookieBanner();return false;">Preferenze cookie</a> <br />Informazione sanitaria ai sensi della legge 248/2006 e 145/2018. Dir. San. Dott A. Zamboni Albo Odontoiatri Di Verona VR01265</p>
 </div>
 		</div></div>
               <div class="copyright-footer__col copyright-footer__col--right"><div id="anpssocial-5" class="widget widget_anpssocial">    
